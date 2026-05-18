@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<CommunityApplications>
+  <Profile>
+**YunKan (云瞰)** — Self-hosted home camera VMS with on-device AI: motion / object / face / license-plate / pose / fall detection. Local-first; your video never leaves the LAN.
+
+This repository ships three Community Applications templates for the single all-in-one YunKan image — pick the variant that matches your inference hardware:
+
+- **YunKan** — CPU-only ONNX Runtime. Runs on any amd64 box, no special hardware.
+- **YunKan-OpenVINO** — Intel iGPU acceleration (UHD 6xx / Iris Xe / Arc / N100 / N305 / J4125 / 12-14th gen Core). YOLO inference is typically 3-5x faster than CPU. Requires the **Intel GPU TOP** plugin.
+- **YunKan-CUDA** — NVIDIA GPU (≥6 GB VRAM recommended). Requires the **NVIDIA Driver** plugin.
+
+All three variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24214`/tcp HLS, `24215`/tcp WebRTC signaling, `23515`/udp WebRTC ICE) so only one variant can be installed at a time.
+
+After install, open the **WebUI** button on the container page to enter the first-run Setup wizard (pick SQLite, create an admin, add cameras).
+
+---
+
+**简介(中文)**: 云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。本仓库提供 3 个变体的 Unraid CA 模板,按硬件二 / 三选一安装。完整中文文档:[yun-kan.com/docs](https://yun-kan.com/zh-CN/docs/install-unraid)。
+
+**Support / 反馈**: please use [GitHub Issues](https://github.com/mrtian2016/yunkan-unraid-templates/issues) for template-specific bugs (icon, ports, install flow). For app-level questions (camera onboarding, AI tuning, license activation) see https://yun-kan.com. An Unraid Forum support thread will be opened post-approval.
+  </Profile>
+  <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
+  <WebPage>https://yun-kan.com</WebPage>
+  <!-- Forum support thread will be added after Unraid CA approval; see Profile for support channels in the meantime. -->
+  <!-- <Forum>https://forums.unraid.net/topic/XXXXX-yunkan-support/</Forum> -->
+</CommunityApplications>

@@ -23,7 +23,7 @@
 - 23515/udp — WebRTC ICE</Overview>
   <Category>HomeAutomation: MediaApp:Video Network:Other</Category>
   <WebUI>http://[IP]:[PORT:23406]/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/yunkan-cpu.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-cpu.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>

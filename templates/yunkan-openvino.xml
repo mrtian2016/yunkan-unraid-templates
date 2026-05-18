@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
-  <Name>YunKan-CUDA</Name>
-  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:latest</Repository>
+  <Name>YunKan-OpenVINO</Name>
+  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-openvino:latest</Repository>
   <Registry>https://cr.console.aliyun.com/cn-hangzhou/instances/repositories</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -9,33 +9,31 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/mrtian2016/yunkan-unraid-templates/issues</Support>
   <Project>https://yun-kan.com</Project>
-  <Overview>云瞰 YunKan — 自托管摄像头云录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒检测），本地优先，隐私不出局域网。**CUDA 变体**，使用 NVIDIA GPU 推理（推荐 ≥6GB 显存，多路高分相机建议 ≥8GB）。&#xD;
+  <Overview>云瞰 YunKan — 自托管摄像头云录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒检测），本地优先，隐私不出局域网。**OpenVINO 变体**，使用 Intel iGPU 硬件加速（UHD 6xx / Iris Xe / Arc / N100 / N305 / J4125 / 12-14 代 Core），YOLO 推理吞吐通常是 CPU 变体的 3-5x，软解 80%/核 → VAAPI 25%/核。&#xD;
 &#xD;
 **先决条件**：&#xD;
-1. Unraid 装 "NVIDIA Driver" plugin → 重启 → `nvidia-smi` 在宿主机可用；&#xD;
-2. 本模板已加 `--runtime=nvidia` 和 NVIDIA_* 环境变量，安装时不需要再改；&#xD;
-3. 镜像约 3-4 GB，首次拉取较慢。&#xD;
+1. Unraid 装 "Intel GPU TOP" plugin → 重启 → /dev/dri 出现在宿主机；&#xD;
+2. 本模板已自动透传 /dev/dri 进容器，安装时不需要再改。&#xD;
 &#xD;
-没有 NVIDIA GPU 请改装 "YunKan"（CPU）或 "YunKan-OpenVINO"（Intel iGPU）。三个变体端口一致，**不能同时启用**。&#xD;
+没有 Intel iGPU 请改装 "YunKan"（纯 CPU 变体）；有 NVIDIA 显卡请改装 "YunKan-CUDA"。三个变体端口一致，**不能同时启用**。&#xD;
 &#xD;
 首次启动浏览器打开 WebUI 进 Setup 向导。&#xD;
 &#xD;
 端口（hardcode）：23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebRTC signaling, 23515/udp WebRTC ICE。</Overview>
   <Category>HomeAutomation: MediaApp:Video Network:Other</Category>
   <WebUI>http://[IP]:[PORT:23406]/</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/yunkan-cuda.xml</TemplateURL>
+  <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-openvino.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
-  <ExtraParams>--runtime=nvidia</ExtraParams>
+  <ExtraParams/>
   <PostArgs/>
   <CPUset/>
   <DateInstalled/>
   <DonateText/>
   <DonateLink/>
-  <Requires>装 "NVIDIA Driver" plugin 让 nvidia-smi 在宿主机可用，否则容器启动时找不到 CUDA。</Requires>
+  <Requires>装 "Intel GPU TOP" plugin 透出 /dev/dri 后再启动本容器，否则 OpenVINO 退回 CPU。</Requires>
   <Config Name="时区 TZ" Target="TZ" Default="Asia/Shanghai" Mode="" Description="容器时区，影响日志时间戳与静默时段 cron。" Type="Variable" Display="always" Required="true" Mask="false">Asia/Shanghai</Config>
-  <Config Name="容器名（license 防漂移）" Target="SKYVIEW_SELF_CONTAINER_NAME" Default="YunKan-CUDA" Mode="" Description="必须与上方 'Name' 字段一致，用于 license 心跳识别容器自身。改 Name 时同步改这里。" Type="Variable" Display="advanced" Required="true" Mask="false">YunKan-CUDA</Config>
-  <Config Name="NVIDIA_VISIBLE_DEVICES" Target="NVIDIA_VISIBLE_DEVICES" Default="all" Mode="" Description="使用哪张卡。多卡环境填 'GPU-xxxx' UUID（nvidia-smi -L 查），默认 all。" Type="Variable" Display="advanced" Required="true" Mask="false">all</Config>
-  <Config Name="NVIDIA_DRIVER_CAPABILITIES" Target="NVIDIA_DRIVER_CAPABILITIES" Default="compute,video,utility" Mode="" Description="启用 GPU 能力：compute（CUDA 推理）+ video（NVDEC 硬解，注：iGPU+VAAPI 实际更省 RAM 拷贝）+ utility（nvidia-smi）。" Type="Variable" Display="advanced" Required="true" Mask="false">compute,video,utility</Config>
+  <Config Name="容器名（license 防漂移）" Target="SKYVIEW_SELF_CONTAINER_NAME" Default="YunKan-OpenVINO" Mode="" Description="必须与上方 'Name' 字段一致，用于 license 心跳识别容器自身。改 Name 时同步改这里。" Type="Variable" Display="advanced" Required="true" Mask="false">YunKan-OpenVINO</Config>
+  <Config Name="Intel iGPU /dev/dri" Target="/dev/dri" Default="/dev/dri" Mode="rwm" Description="Intel iGPU 透传给 OpenVINO + VAAPI 硬解。**安装 Intel GPU TOP plugin 后才有 /dev/dri**。" Type="Device" Display="always" Required="true" Mask="false">/dev/dri</Config>
   <Config Name="数据目录 appdata（DB / 录像 / 模型 / 日志）" Target="/app/data" Default="/mnt/user/appdata/yunkan/data" Mode="rw" Description="云瞰所有持久化数据。Unraid 习惯放 /mnt/user/appdata/&lt;app&gt;/。**录像写入量大时建议改成 cache pool 路径或独立 share**，避免 array spinup。" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/yunkan/data</Config>
   <Config Name="machine-id（license 硬件指纹）" Target="/etc/machine-id" Default="/etc/machine-id" Mode="ro" Description="License 用 Unraid 宿主机 machine-id 做硬件指纹。**不挂的话每次重建容器指纹会漂移，license 占新 slot 后激活失败**。保持只读。" Type="Path" Display="advanced" Required="true" Mask="false">/etc/machine-id</Config>
   <Config Name="product_uuid（license 硬件指纹）" Target="/sys/class/dmi/id/product_uuid" Default="/sys/class/dmi/id/product_uuid" Mode="ro" Description="License 硬件指纹第二信号源（主板 DMI UUID）。保持只读。" Type="Path" Display="advanced" Required="true" Mask="false">/sys/class/dmi/id/product_uuid</Config>
