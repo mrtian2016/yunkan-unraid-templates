@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-CUDA</Name>
-  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.0</Repository>
+  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.2</Repository>
   <Registry>https://cr.console.aliyun.com/cn-hangzhou/instances/repositories</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -9,7 +9,7 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/mrtian2016/yunkan-unraid-templates/issues</Support>
   <Project>https://yun-kan.com</Project>
-  <Overview>云瞰 YunKan — 自托管摄像头云录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒检测），本地优先，隐私不出局域网。**CUDA 变体**，使用 NVIDIA GPU 推理（推荐 ≥6GB 显存，多路高分相机建议 ≥8GB）。&#xD;
+  <Overview>云瞰 YunKan — 自托管摄像头本地录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒检测），本地优先，隐私不出局域网。**CUDA 变体**，使用 NVIDIA GPU 推理（推荐 ≥6GB 显存，多路高分相机建议 ≥8GB）。&#xD;
 &#xD;
 **先决条件**：&#xD;
 1. Unraid 装 "NVIDIA Driver" plugin → 重启 → `nvidia-smi` 在宿主机可用；&#xD;
