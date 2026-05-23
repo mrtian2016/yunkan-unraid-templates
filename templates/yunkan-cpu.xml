@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan</Name>
-  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cpu:0.9.6</Repository>
+  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cpu:0.9.8</Repository>
   <Registry>https://cr.console.aliyun.com/cn-hangzhou/instances/repositories</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -9,15 +9,15 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/mrtian2016/yunkan-unraid-templates/issues</Support>
   <Project>https://yun-kan.com</Project>
-  <Overview>云瞰 YunKan — 自托管摄像头本地录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒检测），本地优先，隐私不出局域网。CPU 变体，任何 amd64 主机直接跑，无任何硬件依赖。&#xD;
+  <Overview>YunKan — self-hosted home camera VMS with local AI (person / vehicle / face / license plate / pose / fall detection). Local-first; your video never leaves the LAN. This is the CPU variant — runs on any amd64 host with no special hardware.&#xD;
 &#xD;
-有 Intel iGPU (J4125 / N100 / N305 / 12 代 Core 等) 请改装 "YunKan-OpenVINO"，推理吞吐 3-5x；有 NVIDIA 显卡请改装 "YunKan-CUDA"。三个变体端口一致，**不能同时启用**。&#xD;
+Have an Intel iGPU (J4125 / N100 / N305 / 12-14th gen Core, etc.)? Install "YunKan-OpenVINO" instead for 3-5x faster YOLO inference. Have an NVIDIA GPU? Install "YunKan-CUDA" instead. All three variants share the same ports — **only one can run at a time**.&#xD;
 &#xD;
-首次启动浏览器打开 WebUI 进 Setup 向导，选 SQLite 即可（最简）。&#xD;
+On first launch, open the WebUI to enter the Setup wizard (pick SQLite for the simplest path).&#xD;
 &#xD;
-端口（hardcode，不可在容器面板改；改端口请走 docker compose 路径）：&#xD;
-- 23406/tcp — HTTP Dashboard / API（nginx 总入口）&#xD;
-- 23880/tcp — RTSP（mediamtx 直连）&#xD;
+Ports (hardcoded inside the image — don't edit them on this page; if you need to change ports use the docker compose path):&#xD;
+- 23406/tcp — HTTP dashboard / API (nginx front door)&#xD;
+- 23880/tcp — RTSP (direct mediamtx)&#xD;
 - 24214/tcp — HLS&#xD;
 - 24215/tcp — WebRTC WHEP signaling&#xD;
 - 23515/udp — WebRTC ICE</Overview>
@@ -32,15 +32,15 @@
   <DonateText/>
   <DonateLink/>
   <Requires/>
-  <Config Name="时区 TZ" Target="TZ" Default="Asia/Shanghai" Mode="" Description="容器时区，影响日志时间戳与静默时段 cron。" Type="Variable" Display="always" Required="true" Mask="false">Asia/Shanghai</Config>
-  <Config Name="容器名（license 防漂移）" Target="SKYVIEW_SELF_CONTAINER_NAME" Default="YunKan" Mode="" Description="必须与上方 'Name' 字段一致，用于 license 心跳识别容器自身。改 Name 时同步改这里。" Type="Variable" Display="advanced" Required="true" Mask="false">YunKan</Config>
-  <Config Name="数据目录 appdata（DB / 录像 / 模型 / 日志）" Target="/app/data" Default="/mnt/user/appdata/yunkan/data" Mode="rw" Description="云瞰所有持久化数据。Unraid 习惯放 /mnt/user/appdata/&lt;app&gt;/。**录像写入量大时建议改成 cache pool 路径或独立 share**，避免 array spinup。" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/yunkan/data</Config>
-  <Config Name="machine-id（license 硬件指纹）" Target="/etc/machine-id" Default="/etc/machine-id" Mode="ro" Description="License 用 Unraid 宿主机 machine-id 做硬件指纹。**不挂的话每次重建容器指纹会漂移，license 占新 slot 后激活失败**。保持只读。" Type="Path" Display="advanced" Required="true" Mask="false">/etc/machine-id</Config>
-  <Config Name="product_uuid（license 硬件指纹）" Target="/sys/class/dmi/id/product_uuid" Default="/sys/class/dmi/id/product_uuid" Mode="ro" Description="License 硬件指纹第二信号源（主板 DMI UUID）。保持只读。" Type="Path" Display="advanced" Required="true" Mask="false">/sys/class/dmi/id/product_uuid</Config>
-  <Config Name="docker socket（自检 / 自重启）" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="云瞰内部用 docker socket 做容器自识别和 OTA 自重启。Unraid 上默认权限正常即可。" Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
-  <Config Name="HTTP / API (nginx)" Target="23406" Default="23406" Mode="tcp" Description="Web Dashboard + REST API 总入口。" Type="Port" Display="always" Required="false" Mask="false">23406</Config>
-  <Config Name="RTSP (mediamtx)" Target="23880" Default="23880" Mode="tcp" Description="摄像头 / 外部播放器直连 mediamtx。" Type="Port" Display="always" Required="false" Mask="false">23880</Config>
-  <Config Name="HLS" Target="24214" Default="24214" Mode="tcp" Description="HLS 拉流端口。" Type="Port" Display="always" Required="false" Mask="false">24214</Config>
-  <Config Name="WebRTC signaling (WHEP)" Target="24215" Default="24215" Mode="tcp" Description="WebRTC WHEP signaling。" Type="Port" Display="always" Required="false" Mask="false">24215</Config>
-  <Config Name="WebRTC ICE" Target="23515" Default="23515" Mode="udp" Description="WebRTC ICE UDP 端口。" Type="Port" Display="always" Required="false" Mask="false">23515</Config>
+  <Config Name="Time zone (TZ)" Target="TZ" Default="Etc/UTC" Mode="" Description="Container time zone. Affects log timestamps and quiet-hours cron." Type="Variable" Display="always" Required="true" Mask="false">Etc/UTC</Config>
+  <Config Name="Container name (license anchor)" Target="SKYVIEW_SELF_CONTAINER_NAME" Default="YunKan" Mode="" Description="Must exactly match the 'Name' field above. The license heartbeat uses this to identify the container itself; if you rename the container, change this too." Type="Variable" Display="advanced" Required="true" Mask="false">YunKan</Config>
+  <Config Name="Data directory (DB / recordings / models / logs)" Target="/app/data" Default="/mnt/user/appdata/yunkan/data" Mode="rw" Description="All YunKan persistent data. Unraid convention is /mnt/user/appdata/&lt;app&gt;/. **For heavy recording workloads, point this at a cache pool or a dedicated share** to avoid spinning up the array." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/yunkan/data</Config>
+  <Config Name="machine-id (license hardware fingerprint)" Target="/etc/machine-id" Default="/etc/machine-id" Mode="ro" Description="The license uses the Unraid host's machine-id as part of its hardware fingerprint. **Without this mount the fingerprint drifts on every container recreate; the license then consumes a new activation slot and eventually fails to activate.** Keep read-only." Type="Path" Display="advanced" Required="true" Mask="false">/etc/machine-id</Config>
+  <Config Name="product_uuid (license hardware fingerprint)" Target="/sys/class/dmi/id/product_uuid" Default="/sys/class/dmi/id/product_uuid" Mode="ro" Description="Second hardware-fingerprint signal (motherboard DMI UUID). Keep read-only." Type="Path" Display="advanced" Required="true" Mask="false">/sys/class/dmi/id/product_uuid</Config>
+  <Config Name="docker socket (self-introspection / OTA self-restart)" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="YunKan uses the docker socket internally for self-identification and OTA self-restart. The default Unraid permissions are fine." Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="HTTP / API (nginx)" Target="23406" Default="23406" Mode="tcp" Description="Web dashboard + REST API front door." Type="Port" Display="always" Required="false" Mask="false">23406</Config>
+  <Config Name="RTSP (mediamtx)" Target="23880" Default="23880" Mode="tcp" Description="Cameras and external players connect directly to mediamtx here." Type="Port" Display="always" Required="false" Mask="false">23880</Config>
+  <Config Name="HLS" Target="24214" Default="24214" Mode="tcp" Description="HLS streaming port." Type="Port" Display="always" Required="false" Mask="false">24214</Config>
+  <Config Name="WebRTC signaling (WHEP)" Target="24215" Default="24215" Mode="tcp" Description="WebRTC WHEP signaling." Type="Port" Display="always" Required="false" Mask="false">24215</Config>
+  <Config Name="WebRTC ICE" Target="23515" Default="23515" Mode="udp" Description="WebRTC ICE UDP port." Type="Port" Display="always" Required="false" Mask="false">23515</Config>
 </Container>

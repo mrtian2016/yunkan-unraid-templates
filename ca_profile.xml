@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <CommunityApplications>
   <Profile>
-**YunKan (云瞰)** — Self-hosted home camera VMS with on-device AI: motion / object / face / license-plate / pose / fall detection. Local-first; your video never leaves the LAN.
+**YunKan** — self-hosted home camera VMS with on-device AI: motion / object / face / license-plate / pose / fall detection. Local-first; your video never leaves the LAN.
 
 This repository ships three Community Applications templates for the single all-in-one YunKan image — pick the variant that matches your inference hardware:
 
@@ -13,11 +13,11 @@ All three variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24
 
 After install, open the **WebUI** button on the container page to enter the first-run Setup wizard (pick SQLite, create an admin, add cameras).
 
+**Support / feedback**: please use [GitHub Issues](https://github.com/mrtian2016/yunkan-unraid-templates/issues) for template-specific bugs (icon, ports, install flow). For app-level questions (camera onboarding, AI tuning, license activation) see https://yun-kan.com. An Unraid Forum support thread will be opened post-approval.
+
 ---
 
-**简介(中文)**: 云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。本仓库提供 3 个变体的 Unraid CA 模板,按硬件二 / 三选一安装。完整中文文档:[yun-kan.com/docs](https://yun-kan.com/zh-CN/docs/install-unraid)。
-
-**Support / 反馈**: please use [GitHub Issues](https://github.com/mrtian2016/yunkan-unraid-templates/issues) for template-specific bugs (icon, ports, install flow). For app-level questions (camera onboarding, AI tuning, license activation) see https://yun-kan.com. An Unraid Forum support thread will be opened post-approval.
+中文用户:云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。完整中文文档:[yun-kan.com/zh-CN/docs/install-unraid](https://yun-kan.com/zh-CN/docs/install-unraid)。
   </Profile>
   <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
   <WebPage>https://yun-kan.com</WebPage>

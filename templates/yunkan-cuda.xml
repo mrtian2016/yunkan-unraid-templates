@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-CUDA</Name>
-  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.6</Repository>
+  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.8</Repository>
   <Registry>https://cr.console.aliyun.com/cn-hangzhou/instances/repositories</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -9,18 +9,18 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/mrtian2016/yunkan-unraid-templates/issues</Support>
   <Project>https://yun-kan.com</Project>
-  <Overview>云瞰 YunKan — 自托管摄像头本地录制 + AI 分析（人/车/人脸/车牌/姿态/跌倒检测），本地优先，隐私不出局域网。**CUDA 变体**，使用 NVIDIA GPU 推理（推荐 ≥6GB 显存，多路高分相机建议 ≥8GB）。&#xD;
+  <Overview>YunKan — self-hosted home camera VMS with local AI (person / vehicle / face / license plate / pose / fall detection). Local-first; your video never leaves the LAN. This is the **CUDA variant**, using an NVIDIA GPU for inference (≥6 GB VRAM recommended; ≥8 GB for many high-resolution cameras).&#xD;
 &#xD;
-**先决条件**：&#xD;
-1. Unraid 装 "NVIDIA Driver" plugin → 重启 → `nvidia-smi` 在宿主机可用；&#xD;
-2. 本模板已加 `--runtime=nvidia` 和 NVIDIA_* 环境变量，安装时不需要再改；&#xD;
-3. 镜像约 3-4 GB，首次拉取较慢。&#xD;
+**Prerequisites:**&#xD;
+1. Install the "NVIDIA Driver" plugin in Unraid → reboot → `nvidia-smi` works on the host;&#xD;
+2. This template already sets `--runtime=nvidia` and the NVIDIA_* env vars — no extra config needed;&#xD;
+3. The image is ~3-4 GB, so the first pull will take a while.&#xD;
 &#xD;
-没有 NVIDIA GPU 请改装 "YunKan"（CPU）或 "YunKan-OpenVINO"（Intel iGPU）。三个变体端口一致，**不能同时启用**。&#xD;
+No NVIDIA GPU? Install "YunKan" (CPU) or "YunKan-OpenVINO" (Intel iGPU). All three variants share the same ports — **only one can run at a time**.&#xD;
 &#xD;
-首次启动浏览器打开 WebUI 进 Setup 向导。&#xD;
+On first launch, open the WebUI to enter the Setup wizard.&#xD;
 &#xD;
-端口（hardcode）：23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebRTC signaling, 23515/udp WebRTC ICE。</Overview>
+Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebRTC signaling, 23515/udp WebRTC ICE.</Overview>
   <Category>HomeAutomation: MediaApp:Video Network:Other</Category>
   <WebUI>http://[IP]:[PORT:23406]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-cuda.xml</TemplateURL>
@@ -31,18 +31,18 @@
   <DateInstalled/>
   <DonateText/>
   <DonateLink/>
-  <Requires>装 "NVIDIA Driver" plugin 让 nvidia-smi 在宿主机可用，否则容器启动时找不到 CUDA。</Requires>
-  <Config Name="时区 TZ" Target="TZ" Default="Asia/Shanghai" Mode="" Description="容器时区，影响日志时间戳与静默时段 cron。" Type="Variable" Display="always" Required="true" Mask="false">Asia/Shanghai</Config>
-  <Config Name="容器名（license 防漂移）" Target="SKYVIEW_SELF_CONTAINER_NAME" Default="YunKan-CUDA" Mode="" Description="必须与上方 'Name' 字段一致，用于 license 心跳识别容器自身。改 Name 时同步改这里。" Type="Variable" Display="advanced" Required="true" Mask="false">YunKan-CUDA</Config>
-  <Config Name="NVIDIA_VISIBLE_DEVICES" Target="NVIDIA_VISIBLE_DEVICES" Default="all" Mode="" Description="使用哪张卡。多卡环境填 'GPU-xxxx' UUID（nvidia-smi -L 查），默认 all。" Type="Variable" Display="advanced" Required="true" Mask="false">all</Config>
-  <Config Name="NVIDIA_DRIVER_CAPABILITIES" Target="NVIDIA_DRIVER_CAPABILITIES" Default="compute,video,utility" Mode="" Description="启用 GPU 能力：compute（CUDA 推理）+ video（NVDEC 硬解，注：iGPU+VAAPI 实际更省 RAM 拷贝）+ utility（nvidia-smi）。" Type="Variable" Display="advanced" Required="true" Mask="false">compute,video,utility</Config>
-  <Config Name="数据目录 appdata（DB / 录像 / 模型 / 日志）" Target="/app/data" Default="/mnt/user/appdata/yunkan/data" Mode="rw" Description="云瞰所有持久化数据。Unraid 习惯放 /mnt/user/appdata/&lt;app&gt;/。**录像写入量大时建议改成 cache pool 路径或独立 share**，避免 array spinup。" Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/yunkan/data</Config>
-  <Config Name="machine-id（license 硬件指纹）" Target="/etc/machine-id" Default="/etc/machine-id" Mode="ro" Description="License 用 Unraid 宿主机 machine-id 做硬件指纹。**不挂的话每次重建容器指纹会漂移，license 占新 slot 后激活失败**。保持只读。" Type="Path" Display="advanced" Required="true" Mask="false">/etc/machine-id</Config>
-  <Config Name="product_uuid（license 硬件指纹）" Target="/sys/class/dmi/id/product_uuid" Default="/sys/class/dmi/id/product_uuid" Mode="ro" Description="License 硬件指纹第二信号源（主板 DMI UUID）。保持只读。" Type="Path" Display="advanced" Required="true" Mask="false">/sys/class/dmi/id/product_uuid</Config>
-  <Config Name="docker socket（自检 / 自重启）" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="云瞰内部用 docker socket 做容器自识别和 OTA 自重启。Unraid 上默认权限正常即可。" Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
-  <Config Name="HTTP / API (nginx)" Target="23406" Default="23406" Mode="tcp" Description="Web Dashboard + REST API 总入口。" Type="Port" Display="always" Required="false" Mask="false">23406</Config>
-  <Config Name="RTSP (mediamtx)" Target="23880" Default="23880" Mode="tcp" Description="摄像头 / 外部播放器直连 mediamtx。" Type="Port" Display="always" Required="false" Mask="false">23880</Config>
-  <Config Name="HLS" Target="24214" Default="24214" Mode="tcp" Description="HLS 拉流端口。" Type="Port" Display="always" Required="false" Mask="false">24214</Config>
-  <Config Name="WebRTC signaling (WHEP)" Target="24215" Default="24215" Mode="tcp" Description="WebRTC WHEP signaling。" Type="Port" Display="always" Required="false" Mask="false">24215</Config>
-  <Config Name="WebRTC ICE" Target="23515" Default="23515" Mode="udp" Description="WebRTC ICE UDP 端口。" Type="Port" Display="always" Required="false" Mask="false">23515</Config>
+  <Requires>Install the "NVIDIA Driver" plugin so `nvidia-smi` works on the host, otherwise the container can't find CUDA at startup.</Requires>
+  <Config Name="Time zone (TZ)" Target="TZ" Default="Etc/UTC" Mode="" Description="Container time zone. Affects log timestamps and quiet-hours cron." Type="Variable" Display="always" Required="true" Mask="false">Etc/UTC</Config>
+  <Config Name="Container name (license anchor)" Target="SKYVIEW_SELF_CONTAINER_NAME" Default="YunKan-CUDA" Mode="" Description="Must exactly match the 'Name' field above. The license heartbeat uses this to identify the container itself; if you rename the container, change this too." Type="Variable" Display="advanced" Required="true" Mask="false">YunKan-CUDA</Config>
+  <Config Name="NVIDIA_VISIBLE_DEVICES" Target="NVIDIA_VISIBLE_DEVICES" Default="all" Mode="" Description="Which GPU(s) to use. On multi-GPU hosts set this to a specific 'GPU-xxxx' UUID (`nvidia-smi -L` to list); default is all." Type="Variable" Display="advanced" Required="true" Mask="false">all</Config>
+  <Config Name="NVIDIA_DRIVER_CAPABILITIES" Target="NVIDIA_DRIVER_CAPABILITIES" Default="compute,video,utility" Mode="" Description="GPU capabilities to enable: compute (CUDA inference) + video (NVDEC hardware decode — note: iGPU + VAAPI actually saves more RAM-copy overhead in practice) + utility (nvidia-smi)." Type="Variable" Display="advanced" Required="true" Mask="false">compute,video,utility</Config>
+  <Config Name="Data directory (DB / recordings / models / logs)" Target="/app/data" Default="/mnt/user/appdata/yunkan/data" Mode="rw" Description="All YunKan persistent data. Unraid convention is /mnt/user/appdata/&lt;app&gt;/. **For heavy recording workloads, point this at a cache pool or a dedicated share** to avoid spinning up the array." Type="Path" Display="always" Required="true" Mask="false">/mnt/user/appdata/yunkan/data</Config>
+  <Config Name="machine-id (license hardware fingerprint)" Target="/etc/machine-id" Default="/etc/machine-id" Mode="ro" Description="The license uses the Unraid host's machine-id as part of its hardware fingerprint. **Without this mount the fingerprint drifts on every container recreate; the license then consumes a new activation slot and eventually fails to activate.** Keep read-only." Type="Path" Display="advanced" Required="true" Mask="false">/etc/machine-id</Config>
+  <Config Name="product_uuid (license hardware fingerprint)" Target="/sys/class/dmi/id/product_uuid" Default="/sys/class/dmi/id/product_uuid" Mode="ro" Description="Second hardware-fingerprint signal (motherboard DMI UUID). Keep read-only." Type="Path" Display="advanced" Required="true" Mask="false">/sys/class/dmi/id/product_uuid</Config>
+  <Config Name="docker socket (self-introspection / OTA self-restart)" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="YunKan uses the docker socket internally for self-identification and OTA self-restart. The default Unraid permissions are fine." Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
+  <Config Name="HTTP / API (nginx)" Target="23406" Default="23406" Mode="tcp" Description="Web dashboard + REST API front door." Type="Port" Display="always" Required="false" Mask="false">23406</Config>
+  <Config Name="RTSP (mediamtx)" Target="23880" Default="23880" Mode="tcp" Description="Cameras and external players connect directly to mediamtx here." Type="Port" Display="always" Required="false" Mask="false">23880</Config>
+  <Config Name="HLS" Target="24214" Default="24214" Mode="tcp" Description="HLS streaming port." Type="Port" Display="always" Required="false" Mask="false">24214</Config>
+  <Config Name="WebRTC signaling (WHEP)" Target="24215" Default="24215" Mode="tcp" Description="WebRTC WHEP signaling." Type="Port" Display="always" Required="false" Mask="false">24215</Config>
+  <Config Name="WebRTC ICE" Target="23515" Default="23515" Mode="udp" Description="WebRTC ICE UDP port." Type="Port" Display="always" Required="false" Mask="false">23515</Config>
 </Container>

@@ -1,137 +1,146 @@
-# 云瞰 YunKan — Unraid Community Applications 模板仓库
+# YunKan — Unraid Community Applications templates
 
-云瞰的 Unraid CA（Community Applications）单容器模板仓库。Unraid 用户可在 **Apps** 标签页搜 "YunKan / 云瞰" 一键安装,体验对齐 Home Assistant 加载项。
+Single-container Unraid CA (Community Applications) templates for **YunKan** (云瞰). Once approved, Unraid users can install it from the **Apps** tab by searching "YunKan" — the experience is on par with a Home Assistant add-on.
 
-> 对应 HA 加载项仓库:`yunkan_addons/`(项目根)。
-> 对应 docker compose 路径(power user / 带 OTA sidecar):`compose.unraid.yml`(项目根)。
+> Sibling repos:
+> - HA add-on: `yunkan_addons/` (project root)
+> - docker compose (power user, with OTA sidecar): `compose.unraid.yml` (project root)
 
 ---
 
-## 三个变体(按硬件二/三选一,**端口一致不能同时启用**)
+## Three variants (pick one — they share ports and cannot run together)
 
-| 模板文件 | 容器名 | 推理 EP | 适用硬件 |
+| Template file | Container name | Inference EP | Target hardware |
 | --- | --- | --- | --- |
-| `templates/yunkan-cpu.xml` | `YunKan` | onnxruntime CPU | 任何 amd64,无硬件依赖 |
-| `templates/yunkan-openvino.xml` | `YunKan-OpenVINO` | OpenVINO + VAAPI | Intel iGPU(J4125 / N100 / N305 / 12-14 代 Core / Arc) |
-| `templates/yunkan-cuda.xml` | `YunKan-CUDA` | onnxruntime CUDA | NVIDIA GPU ≥6GB 显存 |
+| `templates/yunkan-cpu.xml` | `YunKan` | onnxruntime CPU | any amd64 host, no hardware dependency |
+| `templates/yunkan-openvino.xml` | `YunKan-OpenVINO` | OpenVINO + VAAPI | Intel iGPU (J4125 / N100 / N305 / 12-14th gen Core / Arc) |
+| `templates/yunkan-cuda.xml` | `YunKan-CUDA` | onnxruntime CUDA | NVIDIA GPU with ≥6 GB VRAM |
 
-TRT 变体(`yunkan-trt`)不上 CA——驱动 + 显卡型号 + cuDNN 组合约束太多,不适合"一键装"语义。NVIDIA 用户先用 CUDA 变体,需要 TRT 极致性能再走 `compose.unraid.yml`。
+The TRT variant (`yunkan-trt`) is intentionally **not** shipped on CA — the driver × GPU model × cuDNN combinatorial space is too wide for a "one-click install" experience. NVIDIA users should start with the CUDA variant and graduate to TRT through `compose.unraid.yml` if they need the extra throughput.
 
 ---
 
-## 仓库布局
+## Repository layout
 
 ```
 yunkan_unraid_templates/
-├── README.md              # 本文档
-├── LICENSE                # MIT(CA 提交硬要求:OSI-approved license at repo root)
-├── ca_profile.xml         # 仓库级 metadata(Profile / Icon / WebPage / Forum)——CA 提交硬要求
-├── icon.png               # 512x512 PNG,被 ca_profile.xml 和各 template 的 <Icon> 引用
-└── templates/             # 每个 Docker app 一个 XML(CA starter 约定)
-    ├── yunkan-cpu.xml         # CPU 变体
-    ├── yunkan-openvino.xml    # Intel iGPU + OpenVINO 变体
-    └── yunkan-cuda.xml        # NVIDIA CUDA 变体
+├── README.md              # this file
+├── LICENSE                # MIT (CA requires an OSI-approved license at the repo root)
+├── ca_profile.xml         # repo-level metadata (Profile / Icon / WebPage / Forum) — CA hard requirement
+├── icon.png               # 512x512 PNG referenced by ca_profile.xml and every template's <Icon>
+└── templates/             # one XML per Docker app (CA starter convention)
+    ├── yunkan-cpu.xml         # CPU variant
+    ├── yunkan-openvino.xml    # Intel iGPU + OpenVINO variant
+    └── yunkan-cuda.xml        # NVIDIA CUDA variant
 ```
 
-XML 字段对照 `compose.unraid.yml` 1:1 翻译过来,所以 license 指纹 / iGPU 透传 / nvidia runtime / appdata 习惯 全部对齐。改动一边记得改另一边。
+The XML fields are a 1:1 translation of `compose.unraid.yml`, so the license fingerprint mounts, iGPU passthrough, NVIDIA runtime and appdata conventions are all aligned. **Change one side → change the other.**
 
 ---
 
-## 用户安装路径(目标体验)
+## User install flow (the target experience)
 
-### 已上 CA 的用户(理想态)
+### Once approved on CA (the steady state)
 
-1. Unraid Web UI → **Apps** 标签页 → 搜索框输入 "yunkan" 或 "云瞰"
-2. 找到三个变体里匹配自己硬件的那个 → 点 **Install**
-3. CA 弹出表单(本仓库 XML 渲染),默认值即可:
-   - `数据目录 appdata` 默认 `/mnt/user/appdata/yunkan/data`(录像写入大时建议改 cache pool)
-   - `时区 TZ` 默认 `Asia/Shanghai`
-   - **OpenVINO 变体先在 Plugins 装 "Intel GPU TOP"**;**CUDA 变体先装 "NVIDIA Driver" plugin** 并重启 Unraid
-4. 点 **Apply** → Unraid 拉镜像、启动容器
-5. 容器面板点 **WebUI** → 浏览器打开 `http://<Unraid-IP>:23406/` → Setup 向导 → 选 SQLite → 建管理员账号 → 加摄像头
+1. Unraid Web UI → **Apps** tab → search "yunkan"
+2. Pick the variant that matches your hardware → click **Install**
+3. CA renders the install form from this repo's XML — the defaults are sane:
+   - `Data directory` defaults to `/mnt/user/appdata/yunkan/data` (point this at a cache pool if you record a lot)
+   - `Time zone` defaults to `Etc/UTC` — change it to your local zone if you care about log timestamps and quiet-hours cron
+   - **OpenVINO variant**: install the "Intel GPU TOP" plugin first; **CUDA variant**: install the "NVIDIA Driver" plugin first, then reboot
+4. Click **Apply** → Unraid pulls the image and starts the container
+5. Click **WebUI** on the container card → open `http://<Unraid-IP>:23406/` in a browser → first-run Setup wizard → pick SQLite → create an admin → add cameras
 
-OTA 升级:Apps 页面看到红点 → 点 **Update**。无需 yunkan-updater sidecar。
+OTA updates: a red dot appears on the Apps page → click **Update**. No `yunkan-updater` sidecar is needed for this path.
 
-### 还没上 CA 的早期用户
+### Early users (before CA approval)
 
-CA 仓库登记通过前(见下文"发布到 CA"),用户可以**手动添加**本仓库:
+While the CA submission is in review, users can add this repo manually:
 
-1. Unraid Apps → 右上 **Settings** → **Template Repositories**
-2. 粘贴本仓库 GitHub 地址:`https://github.com/mrtian2016/yunkan-unraid-templates`(发布前为占位)
-3. 保存 → 回 Apps 搜 "yunkan" → 后续流程同上
-
----
-
-## 发布到 CA 的完整流程(2026 新版 portal)
-
-> 历史路径(向 `Squidly271/Community-Applications-Moderators` 提 PR 改 `Repositories.json`)在 2026 年已被 deprecate(PR #15 2026-04 被关 "wrong process")。现在必须走官方门户 [ca.unraid.net/submit](https://ca.unraid.net/submit)。
-
-### 0. 仓库前置硬要求(本仓库已满足)
-
-CA portal 校验时会检查:
-
-1. ✅ 仓库 public 且 active
-2. ✅ 根目录有 OSI-approved `LICENSE`(本仓库:MIT)
-3. ✅ 根目录有 `ca_profile.xml` 含非空 `<Profile>` 段(repo 级元数据)
-4. ✅ 有效的 Docker 模板 XML(本仓库:`templates/yunkan-{cpu,openvino,cuda}.xml`)
-5. (portal 时)Run **Validate** + **Scan** 通过
-
-参考官方 starter:[unraid/unraid-community-apps-starter](https://github.com/unraid/unraid-community-apps-starter)
-
-### 1. 走 portal 提交
-
-1. 浏览器开 [ca.unraid.net/submit](https://ca.unraid.net/submit) → GitHub OAuth 登录(用 `mrtian2016`)
-2. 粘 repo URL:`https://github.com/mrtian2016/yunkan-unraid-templates`
-3. 点 **Validate** → portal 检查上述硬要求 + 解析 ca_profile.xml + 解析 templates/*.xml
-4. 点 **Scan** → 安全扫描(可能查 Docker image 来源、`:latest` 用法等)
-5. 都过了点 **Submit** → 进 moderation 队列
-
-提交前先读 [ca.unraid.net/submit/help](https://ca.unraid.net/submit/help) 当前要求。XML 字段 reference:[ca.unraid.net/submit/help/xml-field-reference](https://ca.unraid.net/submit/help/xml-field-reference)。
-
-### 2.(可选 / 后置)发 Unraid Forum Support Thread
-
-CA 鼓励每个 app 有自己的 forum 支持帖给用户提问,版块通常是 Docker Containers:[forums.unraid.net/forum/52-docker-containers](https://forums.unraid.net/forum/52-docker-containers/)。
-
-发完后:
-- 把 thread URL 填进 `ca_profile.xml` 的 `<Forum>` 字段(取消 XML 注释)
-- 三个 template XML 的 `<Support>` 字段从 GitHub Issues 改为 forum thread URL(CA 用户在容器面板点 "Support" 跳到帖子)
-- commit + push,CA 下次 refresh 自动同步
-
-非强制,审核期间可以暂时只挂 GitHub Issues。
-
-### 3. CA portal 拉取节奏
-
-通过审核后 CA 后台自动拉本仓库,改 XML / icon / ca_profile.xml 直接推到 main,不需要重新提交。**改 `<Repository>` image tag 或新增 template 不需要重审**。
+1. Unraid Apps → top right **Settings** → **Template Repositories**
+2. Paste this repo's URL: `https://github.com/mrtian2016/yunkan-unraid-templates`
+3. Save → go back to **Apps** → search "yunkan" → flow continues as above
 
 ---
 
-## 维护注意
+## Publishing to CA (current portal, 2026)
 
-### 改动同步矩阵
+> The old route (PR against `Squidly271/Community-Applications-Moderators` editing `Repositories.json`) is **deprecated** as of 2026 — PR #15 was closed in April 2026 with "wrong process". Submissions now go through the official portal at [ca.unraid.net/submit](https://ca.unraid.net/submit).
 
-| 改了什么 | 同步改 | 原因 |
+### 0. Repository preflight (this repo already meets these)
+
+The CA portal validates:
+
+1. ✅ Repo is public and active
+2. ✅ Root contains an OSI-approved `LICENSE` (this repo: MIT)
+3. ✅ Root contains a `ca_profile.xml` with a non-empty `<Profile>` section
+4. ✅ Valid Docker template XMLs (here: `templates/yunkan-{cpu,openvino,cuda}.xml`)
+5. (in portal) **Validate** + **Scan** both pass
+
+Reference starter: [unraid/unraid-community-apps-starter](https://github.com/unraid/unraid-community-apps-starter)
+
+### 1. Submit via the portal
+
+1. Open [ca.unraid.net/submit](https://ca.unraid.net/submit) → sign in with GitHub OAuth (`mrtian2016`)
+2. Paste the repo URL: `https://github.com/mrtian2016/yunkan-unraid-templates`
+3. Click **Validate** → portal checks the preflight items above and parses `ca_profile.xml` + every `templates/*.xml`
+4. Click **Scan** → security scan (looks at Docker image source, `:latest` usage, etc.)
+5. All green → click **Submit** → enters the moderation queue
+
+Read the current requirements first: [ca.unraid.net/submit/help](https://ca.unraid.net/submit/help). XML field reference: [ca.unraid.net/submit/help/xml-field-reference](https://ca.unraid.net/submit/help/xml-field-reference).
+
+### 2. (Optional, after the fact) open an Unraid Forum support thread
+
+CA encourages every app to have its own forum support thread. The usual section is Docker Containers: [forums.unraid.net/forum/52-docker-containers](https://forums.unraid.net/forum/52-docker-containers/).
+
+After opening it:
+- Fill the thread URL into `ca_profile.xml`'s `<Forum>` field (uncomment it)
+- Change each template XML's `<Support>` from the GitHub Issues URL to the forum thread URL (so the "Support" button on the container page jumps to the forum)
+- Commit + push — CA will pick up the change on its next refresh
+
+Not required for initial approval; GitHub Issues is fine in the meantime.
+
+### 3. CA refresh cadence
+
+Once approved, CA auto-pulls from this repo. Edits to XMLs / icon / `ca_profile.xml` go straight to `main` — no resubmission needed. **Changing the `<Repository>` image tag or adding a new template does not trigger re-review.**
+
+---
+
+## Maintenance
+
+### Change-sync matrix
+
+| Changed | Also change | Why |
 | --- | --- | --- |
-| 端口号(23406 / 23880 / 24214 / 24215 / 23515) | `templates/` 下 3 个 XML + `yunkan_addons/*/config.yaml` + `compose.unraid.yml` + 各 deploy compose + nginx.conf + mediamtx.yml | 端口在镜像里 hardcode,改一处不改全部 = 装上不能用 |
-| 镜像 tag(`:latest` ↔ `:0.x.y`) | `templates/` 下 3 个 XML 的 `<Repository>` | CA 用户走 "Force Update" 拉新 tag,pin 版本会让用户漏更新 |
-| `SKYVIEW_SELF_CONTAINER_NAME` 默认值 | 必须与 `<Name>` 字段完全一致 | License 心跳用容器名识别自身,不一致会触发"容器漂移"告警 |
-| 新加 / 删 volume / device | `templates/` 下 3 个 XML 一起改 + `compose.unraid.yml` + HA addon `config.yaml` | 4 条部署路径必须给出一样的运行时环境 |
-| 改 icon | 替换 `icon.png` 后 commit,CA 用户下次 refresh 自动看到新图 | Unraid 不缓存 icon raw URL,加 `?v=2` query 也无效——直接覆盖原文件 |
+| Ports (23406 / 23880 / 24214 / 24215 / 23515) | all 3 XMLs in `templates/` + `yunkan_addons/*/config.yaml` + `compose.unraid.yml` + every deploy compose + nginx.conf + mediamtx.yml | Ports are hardcoded inside the image; changing one place and not the others = container installs but doesn't work |
+| Image tag (`:latest` vs `:0.x.y`) | `<Repository>` in all 3 templates | CA users get new versions via "Force Update"; pinning a version means they miss updates |
+| `SKYVIEW_SELF_CONTAINER_NAME` default | Must exactly match the template's `<Name>` field | The license heartbeat uses the container name to identify itself; a mismatch triggers a "container drift" alert |
+| Added / removed volumes or devices | all 3 XMLs + `compose.unraid.yml` + the HA add-on `config.yaml` | All four deploy paths must present the same runtime environment |
+| Changed icon | Replace `icon.png` and commit; CA users see the new icon on the next refresh | Unraid does not cache the icon raw URL, and adding a `?v=2` query is a no-op — just overwrite the file |
 
-### 与 HA addon 仓库(`yunkan_addons/`)的差异
+### Differences from the HA add-on repo (`yunkan_addons/`)
 
-- HA 用 `config.yaml`(YAML),Unraid 用 `.xml`,**字段语义对齐但格式不同**——不要试图 share template,各写各的
-- HA addon 端口由 supervisor 渲染到 host,Unraid 走 host network 直绑——所以两边 `ports` 行为一样,但 Unraid XML 里写的端口 `<Display>always` 只是给用户看,改它没用
-- HA addon 走 supervisor 鉴权 ingress(可选),Unraid 没有 ingress 概念,直接 `http://[IP]:23406/`
-- HA addon `SKYVIEW_SELF_CONTAINER_NAME=addon_local_yunkan*`(supervisor 给的容器名前缀),Unraid 用用户起的容器名(本模板默认 `YunKan` / `YunKan-OpenVINO` / `YunKan-CUDA`)
+- HA uses `config.yaml` (YAML); Unraid uses `.xml`. **Field semantics align but the format does not** — don't try to share templates between the two; write each separately.
+- HA add-on ports are rendered through the supervisor onto the host; Unraid uses host networking directly. The runtime port behavior is identical, but the Unraid XML's `<Display>always` on ports is purely cosmetic — editing those values does nothing.
+- HA add-on uses supervisor auth/ingress (optionally); Unraid has no ingress concept — you hit `http://[IP]:23406/` directly.
+- HA add-on `SKYVIEW_SELF_CONTAINER_NAME=addon_local_yunkan*` (supervisor's prefix); Unraid uses whatever the user named the container (this repo defaults to `YunKan` / `YunKan-OpenVINO` / `YunKan-CUDA`).
 
-### 不要做的事
+### Don'ts
 
-- **不要把 yunkan-updater sidecar 也做成 CA 模板**——updater 依赖 `compose.unraid.yml` 在宿主机存在(它 exec `docker compose` 命令),CA 单容器路径下没有 compose 文件,updater 会 boot fail。OTA 走 CA 自己的 "Force Update" 即可。
-- **不要拆 setup 模式成独立模板**——容器跑起来就是 setup 模式(`data/database.toml` 不存在),装完直接进向导,不需要二次模板。
-- **不要 mask license / 密钥字段**——本模板里所有 `<Config>` 都是 `Mask="false"`,因为没有用户输入的敏感信息;license 是装完进 Setup 向导时贴的,不走容器 env。
+- **Don't ship `yunkan-updater` as a CA template** — the updater expects `compose.unraid.yml` to exist on the host (it `exec`s `docker compose` commands). The CA single-container path has no compose file, so the updater would just fail to boot. OTA on CA is "Force Update", and that's enough.
+- **Don't split Setup mode into a separate template** — the container is _already_ in Setup mode when it first starts (`data/database.toml` doesn't exist yet). The user enters the wizard right after install; no second template needed.
+- **Don't mask license or secret fields** — every `<Config>` here uses `Mask="false"`, because there is no user-input secret. The license itself is pasted in the Setup wizard inside the running container; it never lives in a container env var.
 
 ---
 
 ## License
 
-云瞰是商业化软件,容器镜像本身免费使用但 AI 检测等功能需 license 激活。详见 https://yun-kan.com 定价页。本仓库的 Unraid XML 模板代码 MIT。
+YunKan is commercial software. The container image is free to use, but AI detection features require a license to activate — see https://yun-kan.com pricing. The Unraid XML templates in **this** repo are MIT.
+
+---
+
+## 简介(中文)
+
+云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。本仓库提供 3 个 Unraid CA 单容器模板(CPU / Intel iGPU OpenVINO / NVIDIA CUDA),通过审核后可在 Unraid Apps 标签页搜 "yunkan" 一键安装。完整中文安装文档:[yun-kan.com/zh-CN/docs/install-unraid](https://yun-kan.com/zh-CN/docs/install-unraid)。
+
+模板字段与项目根 `compose.unraid.yml` 一一对应,改一边记得改另一边——具体清单见上方 **Change-sync matrix**。
