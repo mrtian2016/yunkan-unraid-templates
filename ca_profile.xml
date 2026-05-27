@@ -1,23 +1,43 @@
 <?xml version="1.0"?>
 <CommunityApplications>
   <Profile>
-**YunKan** — self-hosted home camera VMS with on-device AI: motion / object / face / license-plate / pose / fall detection. Local-first; your video never leaves the LAN.
+**YunKan** — self-hosted, local-first **NVR / VMS** (Network Video Recorder) for home and small-business IP cameras, with on-device AI: motion, **person / vehicle / face / license plate (ALPR / LPR) / pose / fall detection**, plus **AI scene understanding** that turns raw detections into natural-language event summaries ("an elderly person fell in the living room" instead of "detected: pose=fall_down"). Your video — and your AI inference — stay on your LAN; nothing is uploaded to any vendor cloud, no OpenAI / Google / Anthropic API keys needed.
 
-This repository ships three Community Applications templates for the single all-in-one YunKan image — pick the variant that matches your inference hardware:
+![Dashboard](https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/screenshots/dashboard.jpg)
 
-- **YunKan** — CPU-only ONNX Runtime. Runs on any amd64 box, no special hardware.
-- **YunKan-OpenVINO** — Intel iGPU acceleration (UHD 6xx / Iris Xe / Arc / N100 / N305 / J4125 / 12-14th gen Core). YOLO inference is typically 3-5x faster than CPU. Requires the **Intel GPU TOP** plugin.
-- **YunKan-CUDA** — NVIDIA GPU (≥6 GB VRAM recommended). Requires the **NVIDIA Driver** plugin.
+![Events timeline](https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/screenshots/events.jpg)
 
-All three variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24214`/tcp HLS, `24215`/tcp WebRTC signaling, `23515`/udp WebRTC ICE) so only one variant can be installed at a time.
+A privacy-first **Frigate / Shinobi / ZoneMinder / Scrypted / Agent DVR / iSpy / MotionEye** alternative — but pre-bundled into a single all-in-one container so there is no Mosquitto / database / reverse-proxy / model-download wiring to do by hand. **24/7 continuous recording**, **motion-triggered events**, **timeline playback**, **two-way audio (talkback)**, **Home Assistant integration** (MQTT auto-discovery for cameras, sensors and events), web + Android + iOS clients, and optional cloud backup to 115 Pan (115 网盘) — all included.
+
+Works with any **RTSP** or **ONVIF** camera: **Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Anpviz**, generic Chinese ONVIF cams, etc. **Tapo, Wyze, Xiaomi, Eufy, Mi Home, Aqara, Imou** and other proprietary-protocol cameras work via a **go2rtc** bridge.
+
+This repository ships three Community Applications templates for the same all-in-one image — pick the variant that matches your inference hardware:
+
+- **YunKan** — CPU-only inference. Runs on any amd64 box, no special hardware. Lowest setup friction; good for 1-4 cameras at low FPS.
+- **YunKan-OpenVINO** — Intel iGPU acceleration via **OpenVINO + VAAPI hardware decode** (UHD 6xx / Iris Xe / Arc / **N100 / N305 / N5105 / J4125 / J5040 / 12th-14th gen Core**). YOLO inference is typically 3-5x faster than CPU; software decode drops from ~80%/core to ~25%/core. Requires the **Intel GPU TOP** plugin.
+- **YunKan-CUDA** — **NVIDIA GPU** acceleration (≥6 GB VRAM recommended; works great on **RTX 3060 / 4060 / A2000 / Tesla P4 / T4 / Quadro**). Requires the **NVIDIA Driver** plugin.
+
+All three variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24214`/tcp HLS, `24215`/tcp WebRTC signaling, `23515`/udp WebRTC ICE) so **only one variant can be installed at a time**.
 
 After install, open the **WebUI** button on the container page to enter the first-run Setup wizard (pick SQLite, create an admin, add cameras).
+
+**Highlights**
+
+- Local-first AI — no vendor cloud; works fully offline once licensed
+- True NVR: continuous 24/7 recording with motion-event highlights and a scrubbable timeline
+- AI detection: person / vehicle / dog / car / face recognition / license-plate OCR / pose / fall-down / package / cry / gesture
+- **AI scene understanding** — every event gets a plain-language summary you can read in the app or push to Home Assistant; bilingual (English ↔ 中文), all inference on-box. No API keys, no OpenAI / Gemini / Claude calls.
+- Native **Home Assistant** integration via MQTT auto-discovery (every camera becomes an HA device with motion, person, vehicle binary_sensors)
+- **WebRTC (WHEP)** live streaming with sub-second latency; HLS fallback
+- **Two-way talkback** (push-to-talk) on supported ONVIF cameras
+- Web admin + Android + iOS apps included
+- Optional cloud backup to **115 网盘 (115 Pan / 115 Cloud)** for off-site retention
 
 **Support / feedback**: please use [GitHub Issues](https://github.com/mrtian2016/yunkan-unraid-templates/issues) for template-specific bugs (icon, ports, install flow). For app-level questions (camera onboarding, AI tuning, license activation) see https://yun-kan.com. An Unraid Forum support thread will be opened post-approval.
 
 ---
 
-中文用户:云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。完整中文文档:[yun-kan.com/zh-CN/docs/install-unraid](https://yun-kan.com/zh-CN/docs/install-unraid)。
+中文用户:云瞰 是面向家庭用户的自托管摄像头 **NVR / VMS** 系统,本地优先,支持 **运动 / 人 / 车 / 人脸 / 车牌 / 跌倒 / 姿态** 等 AI 检测,并内置 **本地 AI 场景理解**,把每个事件自动转成自然语言摘要("奶奶在客厅摔倒了" 而不是 "检测到 pose=fall_down"),中英双语,**完全离线推理**,不调用任何 OpenAI / 通义 / 文心一言 API,视频不出局域网,无任何厂商云依赖。**Frigate / Shinobi / ZoneMinder / Scrypted / Agent DVR** 的替代品,但开箱即用——MQTT、数据库、模型、反代全部内置。兼容任意 **RTSP / ONVIF** 摄像头(海康 / 大华 / 萤石 / Reolink / 安联 / 凯翼 / Uniview / Anpviz 等);Tapo / 小米 / Wyze / Eufy / 涂鸦 / Aqara / Imou 等私有协议设备通过 **go2rtc** 桥接接入。内置 **Home Assistant** MQTT 自动发现、**WebRTC** 实时直播、**双向对讲**、**24x7 连续录像 + 运动事件高亮时间轴**、**Web / Android / iOS** 三端、可选 **115 网盘** 云端归档。完整中文文档:[yun-kan.com/zh-CN/docs/install-unraid](https://yun-kan.com/zh-CN/docs/install-unraid)。
   </Profile>
   <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
   <WebPage>https://yun-kan.com</WebPage>

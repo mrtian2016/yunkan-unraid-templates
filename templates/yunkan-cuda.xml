@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-CUDA</Name>
-  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.8</Repository>
+  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.9</Repository>
   <Registry>https://cr.console.aliyun.com/cn-hangzhou/instances/repositories</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -9,19 +9,31 @@
   <Privileged>false</Privileged>
   <Support>https://github.com/mrtian2016/yunkan-unraid-templates/issues</Support>
   <Project>https://yun-kan.com</Project>
-  <Overview>YunKan — self-hosted home camera VMS with local AI (person / vehicle / face / license plate / pose / fall detection). Local-first; your video never leaves the LAN. This is the **CUDA variant**, using an NVIDIA GPU for inference (≥6 GB VRAM recommended; ≥8 GB for many high-resolution cameras).&#xD;
+  <Overview>YunKan (云瞰) — self-hosted, local-first **NVR / VMS** for home and small-business IP cameras, with on-device AI: motion, **person / vehicle / face / license plate (ALPR / LPR) / pose / fall detection**. Your video stays on your LAN — nothing is uploaded to any vendor cloud. A privacy-first **Frigate / Shinobi / ZoneMinder / Scrypted / Agent DVR / iSpy / MotionEye** alternative — pre-bundled into a single container so there is no Mosquitto / database / reverse-proxy / model-download wiring to do by hand.&#xD;
+&#xD;
+This is the **CUDA variant** — uses an **NVIDIA GPU** for inference (≥6 GB VRAM recommended; ≥8 GB for many high-resolution cameras). Tested on **RTX 3060 / 3070 / 4060 / 4070 / A2000 / A4000 / Tesla P4 / T4 / Quadro P2000**. Highest throughput of the three variants — best fit if you already run a GPU in your Unraid box for Plex / Jellyfin transcoding or other AI workloads.&#xD;
 &#xD;
 **Prerequisites:**&#xD;
-1. Install the "NVIDIA Driver" plugin in Unraid → reboot → `nvidia-smi` works on the host;&#xD;
+1. Install the **"NVIDIA Driver"** plugin in Unraid → reboot → `nvidia-smi` works on the host;&#xD;
 2. This template already sets `--runtime=nvidia` and the NVIDIA_* env vars — no extra config needed;&#xD;
 3. The image is ~3-4 GB, so the first pull will take a while.&#xD;
 &#xD;
 No NVIDIA GPU? Install "YunKan" (CPU) or "YunKan-OpenVINO" (Intel iGPU). All three variants share the same ports — **only one can run at a time**.&#xD;
 &#xD;
+**Works with any RTSP or ONVIF camera** — Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Anpviz, generic Chinese ONVIF, etc. **Tapo, Wyze, Xiaomi, Eufy, Mi Home, Aqara, Imou** and other proprietary-protocol cameras work via a **go2rtc** bridge.&#xD;
+&#xD;
+**Built in:** 24/7 continuous recording + motion-event highlights, scrubbable timeline playback, **AI scene understanding** that turns each event into a natural-language summary ("an elderly person fell in the living room" — no OpenAI / Gemini / Claude API keys, all inference on your own GPU), bilingual EN ↔ 中文, **WebRTC (WHEP)** sub-second live streaming with HLS fallback, **two-way talkback** (push-to-talk on supported ONVIF cameras), **Home Assistant** integration via MQTT auto-discovery, Web admin + Android + iOS apps, optional off-site backup to **115 网盘 (115 Pan / 115 Cloud)**.&#xD;
+&#xD;
+![Dashboard](https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/screenshots/dashboard.jpg)&#xD;
+&#xD;
+![Events timeline](https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/screenshots/events.jpg)&#xD;
+&#xD;
 On first launch, open the WebUI to enter the Setup wizard.&#xD;
 &#xD;
-Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebRTC signaling, 23515/udp WebRTC ICE.</Overview>
-  <Category>HomeAutomation: MediaApp:Video Network:Other</Category>
+Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebRTC signaling, 23515/udp WebRTC ICE.&#xD;
+&#xD;
+**Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
+  <Category>HomeAutomation: MediaApp:Video Security:</Category>
   <WebUI>http://[IP]:[PORT:23406]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-cuda.xml</TemplateURL>
   <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
