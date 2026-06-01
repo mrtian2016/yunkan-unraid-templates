@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan</Name>
-  <Repository>yunkan/yunkan-cpu:0.9.9</Repository>
-  <Registry>https://hub.docker.com/r/yunkan/yunkan-cpu</Registry>
+  <Repository>martin888/yunkan-cpu:0.9.9</Repository>
+  <Registry>https://hub.docker.com/r/martin888/yunkan-cpu</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>

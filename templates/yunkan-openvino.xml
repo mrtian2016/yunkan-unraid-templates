@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-OpenVINO</Name>
-  <Repository>yunkan/yunkan-openvino:0.9.9</Repository>
-  <Registry>https://hub.docker.com/r/yunkan/yunkan-openvino</Registry>
+  <Repository>martin888/yunkan-openvino:0.9.9</Repository>
+  <Registry>https://hub.docker.com/r/martin888/yunkan-openvino</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>

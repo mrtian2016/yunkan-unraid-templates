@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-CUDA</Name>
-  <Repository>yunkan/yunkan-cuda:0.9.9</Repository>
-  <Registry>https://hub.docker.com/r/yunkan/yunkan-cuda</Registry>
+  <Repository>martin888/yunkan-cuda:0.9.9</Repository>
+  <Registry>https://hub.docker.com/r/martin888/yunkan-cuda</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>
