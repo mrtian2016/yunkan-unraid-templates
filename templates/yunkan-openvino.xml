@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-OpenVINO</Name>
-  <Repository>martin888/yunkan-openvino:0.9.9</Repository>
+  <Repository>martin888/yunkan-openvino:0.9.11</Repository>
   <Registry>https://hub.docker.com/r/martin888/yunkan-openvino</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -33,6 +33,15 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, OpenVINO, VAAPI, Intel iGPU, N100, N300, N305, N5105, J4125, J5040, UHD 6xx, Iris Xe, Arc, hardware decode, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, 核显推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.11 (2026-06-01)
+- **Fixed a background error after upgrading** — servers upgraded from an older version could repeatedly log errors in event-recording retention / cleanup because a database column was missing. This now self-heals on upgrade with no manual action.
+
+### 0.9.10 (2026-06-01)
+- **Fixed a regression where some pages could fail to load after upgrading** — a small number of users saw blank "Cameras", "Automations", and "Live" pages after updating from the previous version. This now self-heals on upgrade with no manual action.
+- **Clearer license plates** — the detection-box outline no longer covers the plate number itself.
+- **Improved event list** — thumbnails switched to a landscape aspect ratio, plate / face recognition results now show inline in the list, and unread markers are cleaner.
+- Other fixes: iOS "mark all read" not refreshing the list; smoother web playback timeline dragging (cursor-anchored scroll zoom).
+
 ### 0.9.9 (2026-06-01)
 - **AI scene understanding** — each event gets an automatic natural-language summary ("a person walks up to the door holding a package"), shown on event cards in the web admin and the Android / iOS apps. All inference runs on-box; no OpenAI / Gemini / Claude API key required.
 - **Smart event search** — search past events by keyword on web and mobile, with semantic matching (searching "delivery" also surfaces "package" events).
