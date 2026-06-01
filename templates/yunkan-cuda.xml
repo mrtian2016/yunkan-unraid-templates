@@ -1,8 +1,8 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-CUDA</Name>
-  <Repository>registry.cn-hangzhou.aliyuncs.com/yunkan/yunkan-cuda:0.9.8</Repository>
-  <Registry>https://cr.console.aliyun.com/cn-hangzhou/instances/repositories</Registry>
+  <Repository>yunkan/yunkan-cuda:0.9.9</Repository>
+  <Registry>https://hub.docker.com/r/yunkan/yunkan-cuda</Registry>
   <Network>host</Network>
   <MyIP/>
   <Shell>sh</Shell>
@@ -30,9 +30,29 @@ No NVIDIA GPU? Install "YunKan" (CPU) or "YunKan-OpenVINO" (Intel iGPU). All thr
 &#xD;
 On first launch, open the WebUI to enter the Setup wizard.&#xD;
 &#xD;
-Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebRTC signaling, 23515/udp WebRTC ICE.&#xD;
+Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP) signaling, 23515/udp+tcp WebRTC ICE media.&#xD;
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
+  <Changes>
+### 0.9.9 (2026-06-01)
+- **AI scene understanding** — each event gets an automatic natural-language summary ("a person walks up to the door holding a package"), shown on event cards in the web admin and the Android / iOS apps. All inference runs on-box; no OpenAI / Gemini / Claude API key required.
+- **Smart event search** — search past events by keyword on web and mobile, with semantic matching (searching "delivery" also surfaces "package" events).
+- **Automatic LAN / WAN switching** — configure both a local and a public address for the same server; the app uses whichever is reachable (LAN at home, public when away), plus a one-tap switch on the home screen. The public live-stream host is now editable in Settings and applies instantly.
+- **Live detection-box overlay** — overlay recognition boxes and labels (person / vehicle / pet) on the live preview; toggleable on all three clients.
+- **Lower-latency live streaming** — added a more compatible playback path with automatic best-method selection for smoother live view across more networks.
+- **Redesigned live view, home, and add / edit-camera screens** on mobile, with full per-camera settings (motion sensitivity, per-class detection toggles, PTZ auto-tracking, offline alerts).
+- **Cyclist merge** — a person riding a bike / motorcycle is now reported as a single "someone cycling" event instead of separate person + vehicle notifications.
+- **Push opens the event detail directly**; event snapshots can be saved to the phone album (with boxes / labels); the web event center adds a zoom / pan snapshot viewer.
+- **Per-camera motion-notification cooldown** for cameras without advanced recognition.
+- **More accurate license-plate recognition**, especially at distance / under motion blur; plates are merged into the matching vehicle event (one record per car).
+- **More reliable Android background keep-alive** to reduce missed push on Chinese OEM phones.
+- **AI summary usage panel** to see processing volume, resource use and success rate.
+- Stability fixes: camera online / offline false reports, occasionally clipped recording segments, drifting detection boxes, talkback behind a reverse proxy, and a blank "cleanup" log tab; push title / event type / image now stay consistent; fixed duplicate device entries piling up under "bound devices".
+
+### 0.9.8 (2026-05-22)
+- More accurate recognition (new in-house model) for people, vehicles, bikes, motorcycles, buses, trucks, birds, cats / dogs, and personal items (backpack / handbag / suitcase).
+- Detection / ignore zones can now apply per object type (e.g. an ignore zone that only ignores vehicles still captures passing people).
+  </Changes>
   <Category>HomeAutomation: MediaApp:Video Security:</Category>
   <WebUI>http://[IP]:[PORT:23406]/</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-cuda.xml</TemplateURL>
@@ -53,8 +73,7 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS, 24215/tcp WebR
   <Config Name="product_uuid (license hardware fingerprint)" Target="/sys/class/dmi/id/product_uuid" Default="/sys/class/dmi/id/product_uuid" Mode="ro" Description="Second hardware-fingerprint signal (motherboard DMI UUID). Keep read-only." Type="Path" Display="advanced" Required="true" Mask="false">/sys/class/dmi/id/product_uuid</Config>
   <Config Name="docker socket (self-introspection / OTA self-restart)" Target="/var/run/docker.sock" Default="/var/run/docker.sock" Mode="rw" Description="YunKan uses the docker socket internally for self-identification and OTA self-restart. The default Unraid permissions are fine." Type="Path" Display="advanced" Required="true" Mask="false">/var/run/docker.sock</Config>
   <Config Name="HTTP / API (nginx)" Target="23406" Default="23406" Mode="tcp" Description="Web dashboard + REST API front door." Type="Port" Display="always" Required="false" Mask="false">23406</Config>
-  <Config Name="RTSP (mediamtx)" Target="23880" Default="23880" Mode="tcp" Description="Cameras and external players connect directly to mediamtx here." Type="Port" Display="always" Required="false" Mask="false">23880</Config>
-  <Config Name="HLS" Target="24214" Default="24214" Mode="tcp" Description="HLS streaming port." Type="Port" Display="always" Required="false" Mask="false">24214</Config>
-  <Config Name="WebRTC signaling (WHEP)" Target="24215" Default="24215" Mode="tcp" Description="WebRTC WHEP signaling." Type="Port" Display="always" Required="false" Mask="false">24215</Config>
-  <Config Name="WebRTC ICE" Target="23515" Default="23515" Mode="udp" Description="WebRTC ICE UDP port." Type="Port" Display="always" Required="false" Mask="false">23515</Config>
+  <Config Name="RTSP" Target="23880" Default="23880" Mode="tcp" Description="Cameras and external players connect directly here." Type="Port" Display="always" Required="false" Mask="false">23880</Config>
+  <Config Name="HLS + WebRTC (WHEP) signaling" Target="24214" Default="24214" Mode="tcp" Description="HLS streaming, WebRTC WHEP signaling, and the media-server API / hooks all share this one port." Type="Port" Display="always" Required="false" Mask="false">24214</Config>
+  <Config Name="WebRTC ICE media" Target="23515" Default="23515" Mode="udp" Description="WebRTC ICE media (UDP + TCP)." Type="Port" Display="always" Required="false" Mask="false">23515</Config>
 </Container>
