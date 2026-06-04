@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan</Name>
-  <Repository>martin888/yunkan-cpu:0.9.11</Repository>
+  <Repository>martin888/yunkan-cpu:0.9.12</Repository>
   <Registry>https://hub.docker.com/r/martin888/yunkan-cpu</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -31,6 +31,18 @@ Ports (hardcoded inside the image — don't edit them on this page; if you need 
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, video doorbell, RTSP, ONVIF, IP camera, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.12 (2026-06-04)
+- **People library** — face recognition is now organized around people: group multiple face samples under one named person for more accurate, stable recognition. The system keeps collecting clearer samples as someone approaches and only alerts on a confirmed stranger (fewer false alarms). Promoted to a top-level menu with naming, merge, split, ignore and hide, synced across web / Android / iOS.
+- **Audio now works on more cameras** — cameras using older audio encodings that had no sound in playback, web or live view are transcoded automatically, so playback, live and recordings all have audio.
+- **Recording storage management** — set a per-camera max size / retention; over-limit recordings are pruned oldest-first. On 115 cloud storage, cleanup now also deletes the cloud copy. New "missing recordings" reconciliation hides records whose files are gone, with a one-tap scan + cleanup. Storage settings are merged into the recordings page.
+- **Smoother web playback** — seamless segment-to-segment playback, ±15-second skip with loading feedback, and a more responsive timeline (cursor-anchored scroll zoom).
+- **More accurate offline-camera status** — overview and live views reflect online / offline in near real time; offline cameras show a clean "offline" placeholder instead of a broken image or endless "connecting".
+- **Steadier offline notifications** — flickering cameras no longer trigger a flood of online / offline alerts.
+- **Service status panel** — a new top-bar user menu and service-status monitor surface each feature's health, errors and warnings.
+- **Better iOS live compatibility** — fixed some H.265 (HEVC) cameras showing no picture on iOS; the microphone is no longer held unnecessarily during live / talkback.
+- **Smoother notification open** — tapping a push now auto-detects LAN vs. remote before loading details, with loading feedback throughout.
+- Other fixes: full-range download failures when exporting 115 recordings by time range; more stable cry / audio detection; clearer activation / migration errors with machine code (four languages).
+
 ### 0.9.11 (2026-06-01)
 - **Fixed a background error after upgrading** — servers upgraded from an older version could repeatedly log errors in event-recording retention / cleanup because a database column was missing. This now self-heals on upgrade with no manual action.
 
