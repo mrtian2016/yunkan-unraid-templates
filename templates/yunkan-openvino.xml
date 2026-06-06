@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <Container version="2">
   <Name>YunKan-OpenVINO</Name>
-  <Repository>martin888/yunkan-openvino:0.9.12</Repository>
+  <Repository>martin888/yunkan-openvino:0.9.13</Repository>
   <Registry>https://hub.docker.com/r/martin888/yunkan-openvino</Registry>
   <Network>host</Network>
   <MyIP/>
@@ -33,6 +33,14 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, OpenVINO, VAAPI, Intel iGPU, N100, N300, N305, N5105, J4125, J5040, UHD 6xx, Iris Xe, Arc, hardware decode, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, 核显推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.13 (2026-06-06)
+- **GB/T 28181 cameras and NVRs** — Hikvision / Dahua / Uniview and other devices that support the "GB28181 upstream platform" register automatically once you enter SkyView's connection details; pick channels to import, including multiple NVR channels in one batch. Live view, recording, AI detection, snapshots, PTZ and presets, two-way audio and on-device playback all work like a normal camera.
+- **One-tap Home Assistant** — after configuring MQTT, every camera shows up in Home Assistant automatically (online/offline status plus live sensors for person / vehicle / animal / package / face / fall / baby-cry detection), ready to use in your automations. Cameras added or removed sync automatically.
+- **Time-lapse recordings** — turn a span of recording into a sped-up clip to review a long period in seconds.
+- **Android pull-to-refresh** on the monitor, events and automations screens.
+- **Faster, smoother LAN/WAN switching on mobile** — connects to your server faster and more reliably on Wi-Fi at home vs. cellular when away; after a cold start or a network change, pages load automatically without manually switching tabs; the occasional "can't connect even though it works" is fixed.
+- Other fixes and polish, including the earlier beta fixes for "no audio" and "AI detection not working" on some H.265 cameras.
+
 ### 0.9.12 (2026-06-04)
 - **People library** — face recognition is now organized around people: group multiple face samples under one named person for more accurate, stable recognition. The system keeps collecting clearer samples as someone approaches and only alerts on a confirmed stranger (fewer false alarms). Promoted to a top-level menu with naming, merge, split, ignore and hide, synced across web / Android / iOS.
 - **Audio now works on more cameras** — cameras using older audio encodings that had no sound in playback, web or live view are transcoded automatically, so playback, live and recordings all have audio.
