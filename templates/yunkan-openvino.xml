@@ -40,7 +40,7 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 
 ### 0.9.14 (2026-06-07)
 - **Fixed AI detection silently getting stuck on "pending"** — on some cameras AI detection would quietly stop (picture fine, no errors in logs) and only recover after manually toggling detection off/on. Fixed, plus new multi-layer self-healing: a stalled stream now auto-reconnects within ~15s, no manual action.
-- **New frozen-frame (camera hang) detection & recovery** — when a camera's picture freezes on a single frame while it still looks online, SkyView now detects it, first auto-reconnects to try to wake the camera, and if it stays frozen marks the camera as faulty and alerts you — instead of silently missing recordings and detections.
+- **New frozen-frame (camera hang) detection &amp; recovery** — when a camera's picture freezes on a single frame while it still looks online, SkyView now detects it, first auto-reconnects to try to wake the camera, and if it stays frozen marks the camera as faulty and alerts you — instead of silently missing recordings and detections.
 - **Fixed AI detection failing to start on some licensed, online machines** — a few machines with a valid license and normal network (panel showing "licensed") couldn't start AI detection; fixed.
 
 ### 0.9.13 (2026-06-06)
