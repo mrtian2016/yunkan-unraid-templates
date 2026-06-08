@@ -39,6 +39,7 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 - **More reliable two-way talk** — fixed occasional connection failures.
 - **Web PTZ controls upgraded** — Synology NVR-style pan/tilt/zoom in the web live view (scroll to zoom, hold a direction to pan), plus main/sub stream switching in the device-management live popup.
 - **Mobile playback now supports landscape full-screen with pinch-to-zoom / pan; sign-in works with just a public address** (Android / iOS).
+- **Update download progress** — the in-app system update now shows a live download progress bar, so you can see how far along the download is instead of staring at a blank screen.
 - **Other improvements** — removed an ineffective motion-detection toggle on mobile; eased occasional stalls caused by database contention.
 
 ### 0.9.15 (2026-06-07)
