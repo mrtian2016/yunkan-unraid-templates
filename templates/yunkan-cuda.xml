@@ -34,6 +34,14 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.16 (2026-06-08)
+- **Fixed AI detection lagging behind when running many cameras** — with several cameras detecting at once, AI detection could fall tens of seconds behind: events showed up in the Incident Center ~30s late, and "Jump to playback" landed after the event, missing the key moment. Now fixed at the root, so detection is real-time again: events appear almost instantly and "Jump to playback" lands right on the moment. The more cameras, the bigger the improvement.
+- **Further fixes for some H.265 (HEVC) cameras** — black screen or missing audio in live view for certain H.265 cameras is fixed.
+- **More reliable two-way talk** — fixed occasional connection failures.
+- **Web PTZ controls upgraded** — Synology NVR-style pan/tilt/zoom in the web live view (scroll to zoom, hold a direction to pan), plus main/sub stream switching in the device-management live popup.
+- **Mobile playback now supports landscape full-screen with pinch-to-zoom / pan; sign-in works with just a public address** (Android / iOS).
+- **Other improvements** — removed an ineffective motion-detection toggle on mobile; eased occasional stalls caused by database contention.
+
 ### 0.9.15 (2026-06-07)
 - **Fixed "ignore zone" not working for birds and similar targets** — after setting a detection zone to "ignore" and choosing a target (e.g. bird) over the whole frame, birds still kept triggering alerts. Fixed: an ignore zone now suppresses the chosen target types regardless of confidence, so common false alarms like flying birds or swaying branches are cleanly filtered out.
 - **Completed missing English / Japanese / Traditional Chinese translations** — detection-zone settings, common dialogs, camera audio capabilities, automation run history, the dashboard AI-detection panel and more previously showed Chinese in non-Chinese UI; now fully translated.
