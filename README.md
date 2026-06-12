@@ -8,15 +8,16 @@ Single-container Unraid CA (Community Applications) templates for **YunKan** (�
 
 ---
 
-## Three variants (pick one — they share ports and cannot run together)
+## Four variants (pick one — they share ports and cannot run together)
 
 | Template file | Container name | Inference EP | Target hardware |
 | --- | --- | --- | --- |
 | `templates/yunkan-cpu.xml` | `YunKan` | onnxruntime CPU | any amd64 host, no hardware dependency |
 | `templates/yunkan-openvino.xml` | `YunKan-OpenVINO` | OpenVINO + VAAPI | Intel iGPU (J4125 / N100 / N305 / 12-14th gen Core / Arc) |
 | `templates/yunkan-cuda.xml` | `YunKan-CUDA` | onnxruntime CUDA | NVIDIA GPU with ≥6 GB VRAM |
+| `templates/yunkan-trt.xml` | `YunKan-TRT` | TensorRT | NVIDIA GPU with ≥6 GB VRAM (highest throughput) |
 
-The TRT variant (`yunkan-trt`) is intentionally **not** shipped on CA — the driver × GPU model × cuDNN combinatorial space is too wide for a "one-click install" experience. NVIDIA users should start with the CUDA variant and graduate to TRT through `compose.unraid.yml` if they need the extra throughput.
+The TRT variant builds GPU-specific inference engines at **first start, on the user's own GPU** (a few minutes, one time; cached under the data directory and reused across restarts / image updates). That keeps the per-GPU engine artifact out of the image, so the same CA template works across NVIDIA cards — the bundled CUDA / cuDNN / TensorRT all ride inside the container. The known failure mode is an older GPU / driver the bundled TensorRT can't target: the engine build errors out. The template's Overview steers those users back to **YunKan-CUDA** (same features, no engine build, no-wait first start), so CUDA stays the safe default and TRT is the opt-in throughput tier.
 
 ---
 
@@ -31,7 +32,8 @@ yunkan_unraid_templates/
 └── templates/             # one XML per Docker app (CA starter convention)
     ├── yunkan-cpu.xml         # CPU variant
     ├── yunkan-openvino.xml    # Intel iGPU + OpenVINO variant
-    └── yunkan-cuda.xml        # NVIDIA CUDA variant
+    ├── yunkan-cuda.xml        # NVIDIA CUDA variant
+    └── yunkan-trt.xml         # NVIDIA TensorRT variant (highest throughput)
 ```
 
 The XML fields are a 1:1 translation of `compose.unraid.yml`, so the license fingerprint mounts, iGPU passthrough, NVIDIA runtime and appdata conventions are all aligned. **Change one side → change the other.**
@@ -74,7 +76,7 @@ The CA portal validates:
 1. ✅ Repo is public and active
 2. ✅ Root contains an OSI-approved `LICENSE` (this repo: MIT)
 3. ✅ Root contains a `ca_profile.xml` with a non-empty `<Profile>` section
-4. ✅ Valid Docker template XMLs (here: `templates/yunkan-{cpu,openvino,cuda}.xml`)
+4. ✅ Valid Docker template XMLs (here: `templates/yunkan-{cpu,openvino,cuda,trt}.xml`)
 5. (in portal) **Validate** + **Scan** both pass
 
 Reference starter: [unraid/unraid-community-apps-starter](https://github.com/unraid/unraid-community-apps-starter)
@@ -112,10 +114,10 @@ Once approved, CA auto-pulls from this repo. Edits to XMLs / icon / `ca_profile.
 
 | Changed | Also change | Why |
 | --- | --- | --- |
-| Ports (23406 / 23880 / 24214 / 24215 / 23515) | all 3 XMLs in `templates/` + `yunkan_addons/*/config.yaml` + `compose.unraid.yml` + every deploy compose + nginx.conf + mediamtx.yml | Ports are hardcoded inside the image; changing one place and not the others = container installs but doesn't work |
-| Image tag (`:latest` vs `:0.x.y`) | `<Repository>` in all 3 templates | CA users get new versions via "Force Update"; pinning a version means they miss updates |
+| Ports (23406 / 23880 / 24214 / 23515) | all 4 XMLs in `templates/` + `yunkan_addons/*/config.yaml` + `compose.unraid.yml` + every deploy compose + nginx.conf + mediamtx.yml | Ports are hardcoded inside the image; changing one place and not the others = container installs but doesn't work |
+| Image tag (`:latest` vs `:0.x.y`) | `<Repository>` in all 4 templates | CA users get new versions via "Force Update"; pinning a version means they miss updates |
 | `SKYVIEW_SELF_CONTAINER_NAME` default | Must exactly match the template's `<Name>` field | The license heartbeat uses the container name to identify itself; a mismatch triggers a "container drift" alert |
-| Added / removed volumes or devices | all 3 XMLs + `compose.unraid.yml` + the HA add-on `config.yaml` | All four deploy paths must present the same runtime environment |
+| Added / removed volumes or devices | all 4 XMLs + `compose.unraid.yml` + the HA add-on `config.yaml` | All deploy paths must present the same runtime environment |
 | Changed icon | Replace `icon.png` and commit; CA users see the new icon on the next refresh | Unraid does not cache the icon raw URL, and adding a `?v=2` query is a no-op — just overwrite the file |
 
 ### Differences from the HA add-on repo (`yunkan_addons/`)
@@ -123,7 +125,7 @@ Once approved, CA auto-pulls from this repo. Edits to XMLs / icon / `ca_profile.
 - HA uses `config.yaml` (YAML); Unraid uses `.xml`. **Field semantics align but the format does not** — don't try to share templates between the two; write each separately.
 - HA add-on ports are rendered through the supervisor onto the host; Unraid uses host networking directly. The runtime port behavior is identical, but the Unraid XML's `<Display>always` on ports is purely cosmetic — editing those values does nothing.
 - HA add-on uses supervisor auth/ingress (optionally); Unraid has no ingress concept — you hit `http://[IP]:23406/` directly.
-- HA add-on `SKYVIEW_SELF_CONTAINER_NAME=addon_local_yunkan*` (supervisor's prefix); Unraid uses whatever the user named the container (this repo defaults to `YunKan` / `YunKan-OpenVINO` / `YunKan-CUDA`).
+- HA add-on `SKYVIEW_SELF_CONTAINER_NAME=addon_local_yunkan*` (supervisor's prefix); Unraid uses whatever the user named the container (this repo defaults to `YunKan` / `YunKan-OpenVINO` / `YunKan-CUDA` / `YunKan-TRT`).
 
 ### Don'ts
 
@@ -141,6 +143,6 @@ YunKan is commercial software. The container image is free to use, but AI detect
 
 ## 简介(中文)
 
-云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。本仓库提供 3 个 Unraid CA 单容器模板(CPU / Intel iGPU OpenVINO / NVIDIA CUDA),通过审核后可在 Unraid Apps 标签页搜 "yunkan" 一键安装。完整中文安装文档:[yun-kan.com/zh-CN/docs/install-unraid](https://yun-kan.com/zh-CN/docs/install-unraid)。
+云瞰是面向家庭用户的自托管摄像头系统,本地优先,支持人 / 车 / 人脸 / 车牌 / 姿态 / 跌倒检测,视频不出局域网。本仓库提供 4 个 Unraid CA 单容器模板(CPU / Intel iGPU OpenVINO / NVIDIA CUDA / NVIDIA TensorRT),通过审核后可在 Unraid Apps 标签页搜 "yunkan" 一键安装。完整中文安装文档:[yun-kan.com/zh-CN/docs/install-unraid](https://yun-kan.com/zh-CN/docs/install-unraid)。
 
 模板字段与项目根 `compose.unraid.yml` 一一对应,改一边记得改另一边——具体清单见上方 **Change-sync matrix**。

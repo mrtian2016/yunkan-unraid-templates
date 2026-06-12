@@ -11,13 +11,14 @@ A privacy-first **Frigate / Shinobi / ZoneMinder / Scrypted / Agent DVR / iSpy /
 
 Works with any **RTSP** or **ONVIF** camera: **Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Anpviz**, generic Chinese ONVIF cams, etc. **Tapo, Wyze, Xiaomi, Eufy, Mi Home, Aqara, Imou** and other proprietary-protocol cameras work via a **go2rtc** bridge.
 
-This repository ships three Community Applications templates for the same all-in-one image — pick the variant that matches your inference hardware:
+This repository ships four Community Applications templates for the same all-in-one image — pick the variant that matches your inference hardware:
 
 - **YunKan** — CPU-only inference. Runs on any amd64 box, no special hardware. Lowest setup friction; good for 1-4 cameras at low FPS.
 - **YunKan-OpenVINO** — Intel iGPU acceleration via **OpenVINO + VAAPI hardware decode** (UHD 6xx / Iris Xe / Arc / **N100 / N305 / N5105 / J4125 / J5040 / 12th-14th gen Core**). YOLO inference is typically 3-5x faster than CPU; software decode drops from ~80%/core to ~25%/core. Requires the **Intel GPU TOP** plugin.
 - **YunKan-CUDA** — **NVIDIA GPU** acceleration (≥6 GB VRAM recommended; works great on **RTX 3060 / 4060 / A2000 / Tesla P4 / T4 / Quadro**). Requires the **NVIDIA Driver** plugin.
+- **YunKan-TRT** — **NVIDIA GPU** acceleration via **TensorRT**, the highest-throughput variant. Builds GPU-specific inference engines on first start (a few minutes, one time; cached on disk and reused afterwards). Same hardware / plugin requirement as YunKan-CUDA; choose this for the most headroom on one GPU, or stay on YunKan-CUDA for a no-wait first start.
 
-All three variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24214`/tcp HLS, `24215`/tcp WebRTC signaling, `23515`/udp WebRTC ICE) so **only one variant can be installed at a time**.
+All four variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24214`/tcp HLS + WebRTC signaling, `23515`/udp+tcp WebRTC ICE) so **only one variant can be installed at a time**.
 
 After install, open the **WebUI** button on the container page to enter the first-run Setup wizard (pick SQLite, create an admin, add cameras).
 
