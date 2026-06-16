@@ -34,6 +34,9 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, TensorRT, TRT, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla T4, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.19 (2026-06-16)
+- **Fixes for 0.9.18** — fixed an error on the Detection Settings → Inference backend page; and the NVIDIA TensorRT acceleration fix mentioned in 0.9.18 (which didn't fully ship) is now applied. Upgrade recommended.
+
 ### 0.9.18 (2026-06-16)
 - **Works with Apple Home (HomeKit, Pro)** — add cameras to the iPhone/iPad Home app: watch live, use Siri, record motion clips straight to iCloud (HomeKit Secure Video), plus listen to camera audio and talk back from your phone. Pair by scanning a QR code in the admin console; each camera has its own switch.
 - **Entry/exit direction is now a single tripwire line** — draw one line instead of two zones; crossing it decides in/out, more accurately and with less setup. Automations can trigger on a specific line. Existing setups migrate automatically.
