@@ -25,6 +25,11 @@ Training is **serial** (one job at a time; the GPU is used exclusively while a j
 No NVIDIA GPU? You do not need this container — you can still fine-tune on **on-demand cloud compute** from within the YunKan admin.&#xD;
 &#xD;
 **Keywords:** YunKan, 云瞰, self-training, fine-tuning, active learning, custom model, on-device AI, edge AI, object detection, NVIDIA, CUDA, GPU, ultralytics, YOLO, trainer, local training, privacy, self-hosted, NVR AI.</Overview>
+  <Changes>
+### 0.9.25 (2026-07-09)
+- **Initial release** — YunKan-Trainer is an optional NVIDIA-GPU sidecar for the main YunKan container. It fine-tunes YunKan's on-device object-detection model on your own cameras' footage, entirely on your LAN: in the YunKan admin you confirm or correct the detector's pre-labels (active learning), then start a training job that this container runs on your GPU and hands back an improved model. Training is serial and fully releases GPU memory and RAM when idle, so it can share a GPU with other workloads between jobs.
+- **Requirements** — an NVIDIA GPU plus the Unraid "NVIDIA Driver" plugin, and the main YunKan container (any variant) on your LAN. In the main container's Settings / Training page, enter this trainer's URL and the same token you set here. No shared volume needed; datasets and models transfer over HTTP. No NVIDIA GPU? You can fine-tune on on-demand cloud compute from the YunKan admin instead.
+  </Changes>
   <Category>HomeAutomation: Productivity:</Category>
   <WebUI>http://[IP]:[PORT:28900]/health</WebUI>
   <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-trainer.xml</TemplateURL>
