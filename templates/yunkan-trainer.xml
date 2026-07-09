@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+<Container version="2">
+  <Name>YunKan-Trainer</Name>
+  <Repository>martin888/yunkan-trainer:latest</Repository>
+  <Registry>https://hub.docker.com/r/martin888/yunkan-trainer</Registry>
+  <Network>host</Network>
+  <MyIP/>
+  <Shell>sh</Shell>
+  <Privileged>false</Privileged>
+  <Support>https://github.com/mrtian2016/yunkan-unraid-templates/issues</Support>
+  <Project>https://yun-kan.com</Project>
+  <Overview>YunKan-Trainer (云瞰本地自训练) — an **optional NVIDIA-GPU sidecar** for YunKan that fine-tunes the on-device object-detection model on YOUR cameras' own footage, entirely on your LAN. It is a separate, single-purpose container: install it only when you want a detector that is more accurate for the specific people / vehicles / packages at your door, in your lighting.&#xD;
+&#xD;
+How it works: in the YunKan web admin you confirm or correct the detector's pre-labels (active-learning). When you have enough samples you start a training job — the main YunKan container ships the dataset to this trainer over HTTP, the trainer fine-tunes with ultralytics on your NVIDIA GPU, exports an ONNX model, and hands it back. Nothing leaves your network.&#xD;
+&#xD;
+**This container is not a full app** — it exposes a small HTTP API on port 28900 (a `/health` endpoint reports GPU / device / busy). It does the training; the main YunKan container drives it. You do not open a normal web UI here.&#xD;
+&#xD;
+**Requirements:**&#xD;
+1. An **NVIDIA GPU** + the Unraid **"NVIDIA Driver"** plugin (reboot, confirm `nvidia-smi` works on the host). This template already sets `--runtime=nvidia` and the NVIDIA_* env vars — no extra GPU config needed.&#xD;
+2. The **main YunKan** container running on your LAN (any variant). In its **Settings → Training** page, enter this machine's trainer URL `http://&lt;this-host-ip&gt;:28900` and the same **TRAINER_TOKEN** you set below.&#xD;
+3. The image is several GB (it bundles torch + ultralytics + the base weights), so the first pull takes a while.&#xD;
+&#xD;
+Training is **serial** (one job at a time; the GPU is used exclusively while a job runs). Each job runs in a short-lived subprocess that **fully releases GPU memory and RAM the moment it finishes** — when idle the container just polls and sleeps, using almost nothing, so it can safely share a GPU with other workloads between jobs.&#xD;
+&#xD;
+No NVIDIA GPU? You do not need this container — you can still fine-tune on **on-demand cloud compute** from within the YunKan admin.&#xD;
+&#xD;
+**Keywords:** YunKan, 云瞰, self-training, fine-tuning, active learning, custom model, on-device AI, edge AI, object detection, NVIDIA, CUDA, GPU, ultralytics, YOLO, trainer, local training, privacy, self-hosted, NVR AI.</Overview>
+  <Category>HomeAutomation: Productivity:</Category>
+  <WebUI>http://[IP]:[PORT:28900]/health</WebUI>
+  <TemplateURL>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/templates/yunkan-trainer.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/icon.png</Icon>
+  <ExtraParams>--runtime=nvidia --shm-size 1gb</ExtraParams>
+  <PostArgs/>
+  <CPUset/>
+  <DateInstalled/>
+  <DonateText/>
+  <DonateLink/>
+  <Requires>Install the Unraid "NVIDIA Driver" plugin so `nvidia-smi` works on the host, otherwise the trainer cannot use the GPU. Also install the main YunKan container (any variant) on your LAN and point its Settings → Training page at this trainer's URL + token.</Requires>
+  <Config Name="Trainer token (shared secret)" Target="TRAINER_TOKEN" Default="" Mode="" Description="Shared secret that authenticates the main YunKan container to this trainer (Bearer token). REQUIRED — an unprotected GPU training endpoint on your LAN can be abused to run arbitrary training jobs. Generate one in the main YunKan admin (Settings → Training → 'Generate token'), paste it here AND into that same page. Use a long random value if you set it by hand." Type="Variable" Display="always" Required="true" Mask="true"></Config>
+  <Config Name="NVIDIA_VISIBLE_DEVICES" Target="NVIDIA_VISIBLE_DEVICES" Default="all" Mode="" Description="Which GPU(s) the trainer may use. On multi-GPU hosts set this to a specific 'GPU-xxxx' UUID (`nvidia-smi -L` to list); default is all." Type="Variable" Display="advanced" Required="true" Mask="false">all</Config>
+  <Config Name="NVIDIA_DRIVER_CAPABILITIES" Target="NVIDIA_DRIVER_CAPABILITIES" Default="compute,utility" Mode="" Description="GPU capabilities to enable: compute (CUDA training) + utility (nvidia-smi, used by the /health GPU probe). Video/NVDEC is not needed — the trainer trains on image frames, it does not decode video." Type="Variable" Display="advanced" Required="true" Mask="false">compute,utility</Config>
+  <Config Name="Listen port" Target="TRAINER_PORT" Default="28900" Mode="" Description="HTTP port the trainer listens on. Must match the port in the trainer URL you enter in the main YunKan admin. If you change it, also update the port mapping below and the WebUI." Type="Variable" Display="advanced" Required="false" Mask="false">28900</Config>
+  <Config Name="Max dataset upload (MB)" Target="SKYVIEW_TRAINER_MAX_UPLOAD_MB" Default="4096" Mode="" Description="Upper bound on the dataset upload the trainer accepts, guarding against a runaway upload filling the disk. Raise it only if you train on very large datasets." Type="Variable" Display="advanced" Required="false" Mask="false">4096</Config>
+  <Config Name="Time zone (TZ)" Target="TZ" Default="Etc/UTC" Mode="" Description="Container time zone. Affects log timestamps only." Type="Variable" Display="advanced" Required="false" Mask="false">Etc/UTC</Config>
+  <Config Name="Trainer API port" Target="28900" Default="28900" Mode="tcp" Description="HTTP API the main YunKan container calls (submit job / poll / download model). The main container must be able to reach this host on this port. (With host networking this is informational — the port is exposed directly on the host.)" Type="Port" Display="always" Required="true" Mask="false">28900</Config>
+  <Config Name="Work directory (optional, persists in-flight jobs)" Target="/work" Default="/mnt/user/appdata/yunkan-trainer/work" Mode="rw" Description="OPTIONAL. The trainer needs no shared volume — datasets and models are transferred over HTTP. Mapping /work only persists an in-progress training job across a container restart (a multi-epoch job can run for hours); finished models are downloaded by the main container immediately, so losing this is not data loss. Leave unmapped for a truly stateless trainer." Type="Path" Display="advanced" Required="false" Mask="false">/mnt/user/appdata/yunkan-trainer/work</Config>
+</Container>

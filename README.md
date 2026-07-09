@@ -21,6 +21,16 @@ The TRT variant builds GPU-specific inference engines at **first start, on the u
 
 ---
 
+## Optional add-on: local self-training (separate sidecar)
+
+| Template file | Container name | Purpose | Target hardware |
+| --- | --- | --- | --- |
+| `templates/yunkan-trainer.xml` | `YunKan-Trainer` | fine-tune the object detector on your own footage (active-learning) | NVIDIA GPU + Unraid "NVIDIA Driver" plugin |
+
+Unlike the four variants above, **YunKan-Trainer is not a variant of the main app** — it is an optional, single-purpose GPU sidecar that runs *alongside* a main YunKan container (any variant), on its own port **28900**, so it does **not** collide with the "one variant at a time" rule. It has no web UI (`/health` just reports GPU / busy). Install it only to train a detector tuned to your own cameras: in the admin you confirm/correct the detector's pre-labels (active-learning), the main container ships the dataset to this sidecar over HTTP, it fine-tunes on your NVIDIA GPU and hands back an ONNX model — nothing leaves your LAN. Training is serial and each job runs in a short-lived subprocess that **fully releases GPU memory + RAM when it finishes**, so it coexists cleanly with other GPU workloads (Plex/Jellyfin transcode, the main YunKan CUDA/TRT variant) between jobs. Point the main container's *Settings → Training* page at `http://<host-ip>:28900` with a shared token. No NVIDIA GPU? You can train on on-demand cloud compute from the admin instead — this container is not needed for that.
+
+---
+
 ## Repository layout
 
 ```
@@ -33,7 +43,8 @@ yunkan_unraid_templates/
     ├── yunkan-cpu.xml         # CPU variant
     ├── yunkan-openvino.xml    # Intel iGPU + OpenVINO variant
     ├── yunkan-cuda.xml        # NVIDIA CUDA variant
-    └── yunkan-trt.xml         # NVIDIA TensorRT variant (highest throughput)
+    ├── yunkan-trt.xml         # NVIDIA TensorRT variant (highest throughput)
+    └── yunkan-trainer.xml     # optional local self-training sidecar (NVIDIA GPU, not a variant)
 ```
 
 The XML fields are a 1:1 translation of `compose.unraid.yml`, so the license fingerprint mounts, iGPU passthrough, NVIDIA runtime and appdata conventions are all aligned. **Change one side → change the other.**
