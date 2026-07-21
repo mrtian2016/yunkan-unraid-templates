@@ -33,6 +33,15 @@ Ports (hardcoded): 23406/tcp HTTP, 23880/tcp RTSP, 24214/tcp HLS + WebRTC (WHEP)
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, OpenVINO, VAAPI, Intel iGPU, N100, N300, N305, N5105, J4125, J5040, UHD 6xx, Iris Xe, Arc, hardware decode, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 核显推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.29
+- **A brand-new "desktop" web console** — the web admin gains a desktop-style interface where live view, playback, the event center, cameras, the face library, automations, the file manager and system settings are independent windows you can drag, resize and minimize, plus freely-placed desktop widgets. The classic console stays available and settings sync across both.
+- **Theme and wallpaper follow day and night** — a new "Follow system" theme goes light by day and dark by night, and the desktop wallpaper switches between a matching light / dark pair; you can also upload your own wallpaper and it follows your account across browsers.
+- **A smoother event center** — the event list now uses smooth infinite scrolling and loads faster.
+- **One-click reset for training data** — wipe all labels and training jobs in one tap, or delete a single job, with leftover artifacts cleaned up automatically.
+- **Stay logged in longer** — the login session now lasts 30 days.
+- **Fixed history logs you couldn't view or clear** — past logs are compressed and archived; the log center previously couldn't show or clear these, now fixed.
+- **Smarter camera adding** — richer device details when adding / discovering cameras (model, MAC, already-added, audio codec), and GB28181 devices grouped by NVR.
+
 ### 0.9.28
 - **Choose the level of detail for AI summaries** — local AI summaries can now be "Concise" (a single sentence about the subject and what it's doing) or "Detailed" (a full paragraph, the default).
 - **Fixed AI summaries failing entirely with self-hosted AI services** — some recent updates to Ollama-style services started rejecting summary requests outright; YunKan now adapts to them automatically and summaries work again.
