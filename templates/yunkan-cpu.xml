@@ -34,6 +34,7 @@ Ports (hardcoded inside the image — don't edit them on this page; if you need 
 ### 0.9.30
 - **Choose detection devices by graphics card** — AI detection's "Video decoding" and "AI inference" can now be set directly by graphics-card name (just like Plex); on machines with an integrated GPU plus a discrete card, or multiple cards, assign each independently, while single- or no-GPU machines stay on "Auto".
 - **Fixed the device picker snapping back to "Auto" after saving** — choosing a device and saving previously made the dropdown snap back to "Auto" (it was actually saved and in effect); now fixed, so your chosen device shows correctly right after saving.
+- **Fixed occasional live view / snapshots not opening in the Home Assistant integration** — if the connection to Home Assistant dropped it previously would not reconnect, leaving live and snapshot links stuck expired; the connection now reconnects automatically, fully resolving this.
 
 ### 0.9.29
 - **A brand-new "desktop" web console** — the web admin gains a desktop-style interface where live view, playback, the event center, cameras, the face library, automations, the file manager and system settings are independent windows you can drag, resize and minimize, plus freely-placed desktop widgets. The classic console stays available and settings sync across both.
