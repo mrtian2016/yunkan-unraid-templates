@@ -125,7 +125,7 @@ Once approved, CA auto-pulls from this repo. Edits to XMLs / icon / `ca_profile.
 
 | Changed | Also change | Why |
 | --- | --- | --- |
-| Ports (23406 / 23880 / 24214 / 23515) | all 4 XMLs in `templates/` + `yunkan_addons/*/config.yaml` + `compose.unraid.yml` + every deploy compose + nginx.conf + mediamtx.yml | Ports are hardcoded inside the image; changing one place and not the others = container installs but doesn't work |
+| Ports (23406 / 23880 / 24214 / 23515) | all 4 XMLs in `templates/` + `yunkan_addons/*/config.yaml` + `compose.unraid.yml` + every deploy compose + the image's nginx config | Ports are hardcoded inside the image; changing one place and not the others = container installs but doesn't work. The public direct-access port (23443 by default) is the exception - users pick it in the web interface, so it is not pinned anywhere here |
 | Image tag (`:latest` vs `:0.x.y`) | `<Repository>` in all 4 templates | CA users get new versions via "Force Update"; pinning a version means they miss updates |
 | `SKYVIEW_SELF_CONTAINER_NAME` default | Must exactly match the template's `<Name>` field | The license heartbeat uses the container name to identify itself; a mismatch triggers a "container drift" alert |
 | Added / removed volumes or devices | all 4 XMLs + `compose.unraid.yml` + the HA add-on `config.yaml` | All deploy paths must present the same runtime environment |
