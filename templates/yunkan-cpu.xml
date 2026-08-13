@@ -33,6 +33,12 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, video doorbell, RTSP, ONVIF, IP camera, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.39
+- **Basic motion detection on the free tier** -- motion detection and push notifications now work without a paid license; the settings pages clearly mark what is free and what needs an upgrade.
+- **The live wall remembers where you put each camera** -- manually arranged grid positions are saved, and each grid size keeps its own arrangement.
+- **The AI summary failure alert can be switched off** -- summaries keep retrying on their own and missed events are filled in once the service recovers.
+- **Fixed a false alarm when saving the remote-access port** -- the port actually worked; only the message was wrong.
+
 ### 0.9.38
 - **Live video starts much faster on phones away from home** -- iPhones often took ten seconds or more to show a picture (Android was quick); now it appears within a few seconds.
 - **Settings toggles can be switched off again** -- "IPv6 direct connection" and "automatic HTTPS certificate" could previously only be turned on: the switch showed off and saving reported success, but they stayed on.
