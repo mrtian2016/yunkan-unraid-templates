@@ -35,6 +35,13 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+### 0.9.40
+- **Leaner, steadier AI detection** -- same all-cameras HD detection at noticeably lower load, with unchanged quality and frame rate.
+- **No more periodic stutter on flaky cameras** -- cameras on shaky networks recover detection in place, without interrupting or flooding the logs.
+- **More accurate event timing** -- event and trajectory timestamps now line up with the recording.
+- **Set camera lights to auto/on/off** -- supported cameras (Hikvision, Dahua, Reolink, TP-Link) expose their supplemental light in settings; AI summaries gain adjustable detail and optional cloud deep analysis.
+- **TP-Link home cameras (TL-IPC) now supported.**
+- **Fixes** -- Hikvision IR-only light control, desktop "Go to settings" navigation, event thumbnail aspect ratio, curly quotes on non-Chinese UIs, and upgrade guidance when the docker socket isn't mounted.
 ### 0.9.39
 - **Basic motion detection on the free tier** -- motion detection and push notifications now work without a paid license; the settings pages clearly mark what is free and what needs an upgrade.
 - **The live wall remembers where you put each camera** -- manually arranged grid positions are saved, and each grid size keeps its own arrangement.
