@@ -35,6 +35,14 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.45 (2026-08-31)**
+
+- 跌倒识别继续完善：人倒下后被画面短暂认丢不再从头计时；站起来后再摔算新事件
+- 摔到桌子等家具后面（下半身被挡）看清躺倒姿势即可提醒，坐在桌前不受影响
+- 系统刚启动或人进入画面时已倒地（横躺、头朝镜头）现在能报
+- 幼儿明显平躺一段时间会提醒，爬行蹲坐照旧不报
+- 修正弯腰保护误挡跪倒的情况；诊断日志补全，导出日志即可定位原因
+
 ### 0.9.44
 - **Falls are judged on several signals together** -- this used to be a chain of conditions that all had to hold, and missing any one meant no alert at all. One of them was "we saw this person standing before they went down", which is unavailable in very ordinary situations: someone passes behind furniture and reappears, the system has just restarted, or the person crawls in from outside the frame. Several signals are now weighed together, so one missing piece only lowers the confidence instead of silencing the alert.
 - **The alert image is the moment of the fall** -- the picture used to be taken when the alert was sent, by which point the person may have got up and walked off. It is now the frame the judgement was made on.
