@@ -34,6 +34,13 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, OpenVINO, VAAPI, Intel iGPU, N100, N300, N305, N5105, J4125, J5040, UHD 6xx, Iris Xe, Arc, hardware decode, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 核显推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.46 (2026-09-01)**
+
+- 跌倒提醒新增云端智能复核：报警后由云端 AI 再看一眼画面判断是床上沙发上还是真的倒地，结论写进事件详情；可选「复核认定在床上或沙发时不推送」（默认关闭）；复核不确定或没开云端 AI 时照常提醒
+- 画了跌倒忽略区还在报的情况现在能自查：事件里记下加载了几个区、判定位置、有没有命中
+- 初始化向导修复一批「装不上」：MySQL 全新安装必失败已修；数据库连不上不再反复重启，页面写明原因、恢复后自动继续；从 NAS 面板点进来无限跳转、重装后向导转圈没反应已修
+- AI 摘要模型的网页离线导入可用了；与本机不匹配的模型包会被明确拒绝，不再覆盖已装好的
+
 **0.9.45 (2026-08-31)**
 
 - 跌倒识别继续完善：人倒下后被画面短暂认丢不再从头计时；站起来后再摔算新事件
