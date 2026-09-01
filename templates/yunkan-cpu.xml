@@ -33,6 +33,13 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, video doorbell, RTSP, ONVIF, IP camera, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.47 (2026-09-01)**
+
+- 跌倒复核结论直接写进事件摘要：云端复核「在床上 / 在沙发上 / 倒在地上」的结论现在作为事件摘要显示在 App 详情、网页事件卡片和 Home Assistant 里；复核对「蹲着」「站着弯腰」分辨更准，多人画面会锁定触发报警的那个人来判断
+- 幼儿俯身拿东西不再被当作跌倒：没有明显下落动作时需要持续平躺约 10 秒才提醒，一瞬间的俯身弯腰不触发；真正倒下并保持不动仍会及时提醒
+- AI 分析设置页新增「测试连通性」：配好云端或本地 AI 后一键验真，当场显示耗时和示例回话
+- 桌面版控制面板补齐跌倒复核开关与 WebRTC IPv6 开关，两端设置项已对齐
+
 **0.9.46 (2026-09-01)**
 
 - 跌倒提醒新增云端智能复核：报警后由云端 AI 再看一眼画面判断是床上沙发上还是真的倒地，结论写进事件详情；可选「复核认定在床上或沙发时不推送」（默认关闭）；复核不确定或没开云端 AI 时照常提醒
