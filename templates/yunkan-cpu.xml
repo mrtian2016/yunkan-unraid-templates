@@ -33,6 +33,12 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, video doorbell, RTSP, ONVIF, IP camera, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.48 (2026-09-02)**
+
+- 跌倒「在床上/沙发上不推送」现在对电脑桌面提醒和浏览器通知也生效：此前开了开关手机确实不推，但这两处仍照弹；其余结论、复核超时或出错时一律照常提醒
+- 跌倒事件摘要不再出现画面里没有的「红框」：复核给判定对象做的标记曾被写进摘要文字，现在摘要只描述人和场景本身
+- 画面卡顿一次后不再长期占着 CPU：某一路连续几次取流失败（网络抖动、相机重启）此前会永久退回更耗 CPU 的解码方式直到重启，多路退化让负载居高不下；现在按逐渐拉长的间隔自动试回硬件加速，抖动过去能自己恢复
+
 **0.9.47 (2026-09-01)**
 
 - 跌倒复核结论直接写进事件摘要：云端复核「在床上 / 在沙发上 / 倒在地上」的结论现在作为事件摘要显示在 App 详情、网页事件卡片和 Home Assistant 里；复核对「蹲着」「站着弯腰」分辨更准，多人画面会锁定触发报警的那个人来判断
