@@ -34,6 +34,12 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, OpenVINO, VAAPI, Intel iGPU, N100, N300, N305, N5105, J4125, J5040, UHD 6xx, Iris Xe, Arc, hardware decode, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 核显推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.50 (2026-09-03)**
+
+- 通知渠道统一管理:钉钉、企业微信、飞书(机器人与应用)、Bark、Server酱、Telegram、Discord、Slack、群晖 Chat、VoceChat 等在「设置 → 通知」配一次,自动化规则里新增「通知渠道」动作只选渠道;已有的钉钉 / 企业微信 / 飞书 / Bark 动作自动迁入,被规则引用的渠道不会被误删
+- 跌倒识别:侧躺蜷曲(腿部被身体挡住)不再漏报,躺够约 3 秒即报;弯腰捡东西这类瞬时动作仍不误报
+- 升级页对由平台管理容器的部署(群晖 Container Manager / TrueNAS 等)直接说明到平台自身的更新入口升级,不再显示无法完成的升级方式
+
 **0.9.49 (2026-09-02)**
 
 - 自动化的 webhook 与机器人通知可以直接带上现场画面：新增「快照图片数据」变量把带标注框的快照嵌进 webhook 请求体或 MQTT 消息，接收端不用再访问家里内网的快照链接；企业微信机器人新增「附带事件快照」开关（默认关闭，附图失败不影响文字送达）；钉钉、飞书等机器人文案可插入快照链接
