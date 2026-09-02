@@ -35,6 +35,15 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.49 (2026-09-02)**
+
+- 自动化的 webhook 与机器人通知可以直接带上现场画面：新增「快照图片数据」变量把带标注框的快照嵌进 webhook 请求体或 MQTT 消息，接收端不用再访问家里内网的快照链接；企业微信机器人新增「附带事件快照」开关（默认关闭，附图失败不影响文字送达）；钉钉、飞书等机器人文案可插入快照链接
+- 跌倒「在床上/沙发上不推送」现在对自动化里的 webhook 和机器人通知也生效；跌倒联动消息引用「事件摘要」时会等复核描述出来再发（最多约 10 秒），不再发空摘要
+- 摄像头管理页新增「调整顺序」：拖动卡片（手机长按）或用箭头逐格移动后保存，只影响管理页本身，实时画面墙与手机首页布局不变
+- 服务状态新增「启动中」：AI 识别加载模型期间不再显示成「已停止」，加载完成自动变回「运行中」
+- 两处「点了没反应」修复：磁盘写满时刚打开的功能不再一直停在待机；AI 识别页「全部恢复」对处于自动退避中的相机也立即重试
+- 桌面版网页的文字可以选中复制了（事件摘要、RTSP 地址、日志行等），拖窗口时仍不会误选
+
 **0.9.48 (2026-09-02)**
 
 - 跌倒「在床上/沙发上不推送」现在对电脑桌面提醒和浏览器通知也生效：此前开了开关手机确实不推，但这两处仍照弹；其余结论、复核超时或出错时一律照常提醒
