@@ -35,6 +35,10 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, TensorRT, TRT, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla T4, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.51 (2026-09-03)**
+
+- 跌倒识别:长时间安静坐着不再被误判为跌倒——上一版新增的「按身体横向铺开时长」补充判定,现在要求横着铺开是这段时间里的主要姿势,而不是一两分钟里零星几下凑够秒数;久坐、伏案不再误报,上一版修好的侧躺漏报照常有效
+
 **0.9.50 (2026-09-03)**
 
 - 通知渠道统一管理:钉钉、企业微信、飞书(机器人与应用)、Bark、Server酱、Telegram、Discord、Slack、群晖 Chat、VoceChat 等在「设置 → 通知」配一次,自动化规则里新增「通知渠道」动作只选渠道;已有的钉钉 / 企业微信 / 飞书 / Bark 动作自动迁入,被规则引用的渠道不会被误删
