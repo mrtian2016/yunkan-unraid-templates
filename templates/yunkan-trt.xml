@@ -35,6 +35,12 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, TensorRT, TRT, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla T4, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.52 (2026-09-04)**
+
+- 唯一的管理员忘了密码可以自己重置:在设备上执行 `docker exec -it yunkan skyview-reset-password --user admin`,按提示输入两次新密码即可,账号被停用时可顺带重新启用;密码只在终端输入、不写进命令行,不会留在命令历史里。顺带修掉一个会让输入的密码被吃掉开头几个字的问题(症状是重置后新密码怎么输都不对,且全程无报错)
+- 跌倒识别:同一个人短时间内不再被重复告警——矮桌前久坐时身体被家具挡住一部分,此前会把「身形忽然变矮」误当成又一次从坐到躺、重新计时再报一次;现在对已报过的这一段核对身体下缘位置(真的倒下只会往地面方向走、不会上抬),没报过的场景照常判定,真实跌倒不受影响
+- 繁体中文界面通知相关文案改用「推播」(台港澳的习惯说法),只调整通知语境的用词
+
 **0.9.51 (2026-09-03)**
 
 - 钉钉 / 企业微信 / 飞书等机器人通知里引用「事件描述」不再是空白:动作文案用到这个变量时,系统先等 AI 画面描述出来再发(本机识别最多约 15 秒、云端最多约 60 秒,可调),等不到就照常发出只是不带描述;不含该变量的动作、手机推送与语音喊话仍立即触发。云端识别改为并行,事件密集时不再排队几分钟
