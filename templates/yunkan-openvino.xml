@@ -34,6 +34,17 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, OpenVINO, VAAPI, Intel iGPU, N100, N300, N305, N5105, J4125, J5040, UHD 6xx, Iris Xe, Arc, hardware decode, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 核显推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.53 (2026-09-08)**
+
+- 登录可以加第二道验证:在「我的账号 → 登录安全」绑定验证器 App,之后输完密码再输 6 位验证码;绑定时给 10 个一次性恢复码;管理员可在用户管理里帮别人重置二次验证
+- 网页端支持通行密钥(指纹 / 面容直接登录或作第二道验证,需 HTTPS 域名访问);单点登录(SSO)可接入 Authentik、Keycloak、微软账号等标准身份服务,官网新增三篇教程
+- 手机扫码登录:网页登录页新增「扫码登录」标签,用手机 App 顶栏的扫码按钮扫一下、在手机上确认即可,确认页显示来源设备 / 地址 / 是否同一网络,「不是我」会锁定账号 15 分钟;开了两步验证的账号还可以「用手机批准」(数字匹配)
+- 第三方集成不再需要保存你的密码:新增授权页,Home Assistant 这类集成跳到云瞰登录后点「授权」拿专用令牌;API 令牌所有账号可签发,管理员可按用户查看和撤销
+- 通知图片上的检测框和姿态骨架可以分别关掉(「设置 → 通知」两个开关,默认开),影响发给通知渠道 / Webhook / Home Assistant 的事件图片
+- 跌倒识别:镜头前的异物不再被当成躺着的人——只凭两三个零星关键点连成横线的「躺姿」不再单独触发,有身体塌陷 / 下坠 / 头低于脚等硬证据时照常报警,真实跌倒不受影响
+- 公网单端口访问时,登录确认页能看到真实的来源地址(此前一律为空);排查「有车 / 有人却没报事件」时默认日志里能直接看到识别分数;法语 / 日语 / 繁中界面用词统一
+- 手机 App(Android):首页版面可以自己排(长按编辑、拖动换位、切换大小、1 / 2 / 3 列,按账号保存);登录页改版,支持两步验证与单点登录
+
 **0.9.52 (2026-09-04)**
 
 - 唯一的管理员忘了密码可以自己重置:在设备上执行 `docker exec -it yunkan skyview-reset-password --user admin`,按提示输入两次新密码即可,账号被停用时可顺带重新启用;密码只在终端输入、不写进命令行,不会留在命令历史里。顺带修掉一个会让输入的密码被吃掉开头几个字的问题(症状是重置后新密码怎么输都不对,且全程无报错)
