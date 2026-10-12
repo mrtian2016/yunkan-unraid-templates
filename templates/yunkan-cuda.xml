@@ -35,6 +35,18 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.54 (2026-10-12)**
+
+- 手机推送改为端到端加密:内容按每台手机单独加密,只有你的手机能解开,设备本身也不再内置推送凭据。⚠️ 请同时把手机 App 升级到 0.9.54——旧版 App 默认只收到「有新的通知,点击查看。升级 App 后,通知里就能直接看到内容」;确需旧 App 显示内容可在「设置 → 通知」打开「旧版 App 仍接收明文推送」
+- 设备时钟不准(NAS 没开网络对时)也不会再悄悄收不到手机推送
+- 看不清脸时也能分清家人、常客和陌生人:结合当天穿着、身高体型、进出时间与方向、车牌等线索判断到访「很可能是谁」,线索不足宁可说「不确定」;人物页可设家庭角色,事件卡显示身份与依据并可 👍 👎 纠正,自动化可按家人 / 陌生人 / 具体某人设条件
+- 检测设置化繁为简:上百个参数整理成 25 张能力卡(开关 + 用途说明 + 低 / 标准 / 高灵敏度 + 常用选项),全部细项参数收进「专家模式」
+- 未归类人脸可以直接「命名为新人物」;网页界面字号可选小 / 中 / 大(默认大一号);回放页加截图按钮;训练页标注队列可一键清空
+- 录像不再隔段丢失(没登记上的完好分段自动补回,录像健康检查能发现缺段);事件快照目录里没人用的旧图片自动清理,不再占满磁盘
+- 通用 ONVIF / TP-Link VIGI 摄像头的事件终于有快照;部分 NAS 上人脸 / 宠物照片「录入失败」修复
+- 自动化模板新增「有人出现就推送」「检测到人车动物就推送」;越线事件补进事件分级与订阅事件列表;默认规则名跟随界面语言
+- 新装机默认用更省资源的检测码流,已有设备升级后保持原设置不变
+
 **0.9.53 (2026-09-08)**
 
 - 登录可以加第二道验证:在「我的账号 → 登录安全」绑定验证器 App,之后输完密码再输 6 位验证码;绑定时给 10 个一次性恢复码;管理员可在用户管理里帮别人重置二次验证
