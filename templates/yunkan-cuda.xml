@@ -35,6 +35,15 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.55 (2026-10-18)**
+
+- 摄像头喊话、自动化语音播报恢复正常(10 月 13 日起语音合成服务调整了接入方式,喊话会全部失败;语音对讲不受影响)
+- ⚠️ 磁盘快写满时会自动删除最旧的录像,保证不停录:剩余空间低到约 1 小时录像量(整盘的 2%~3%)时,即使磁盘是被云瞰之外的文件占满,也会删除最旧的录像腾出空间;空间特别紧张时,还没上传网盘的录像和「保留」的事件录像也会被删。和其它应用共用一块磁盘的,建议在「存储」里设置录像总配额
+- 事件可以「保留」:保留的事件和它的录像不会被自动清理删掉(磁盘即将写满时除外);存储设置新增「事件录像保留天数(可选)」
+- 存储页显示「录像能保留多久」,可一键填入建议的录像总配额;编辑摄像头时可以看到这台摄像头每天占用多少、预计能保留几天
+- 宠物库「待整理」区不再越堆越多:系统自动控制数量(每台摄像头最多 600 张),删掉的候选不会再被提出来(可点「恢复提示」),弹窗按摄像头分组,可以清空一台摄像头或全部清空;系统发现的宠物可以直接并入已有宠物
+- 按车牌设置的车辆自动化规则恢复触发;训练页激活模型时进度横幅空白的问题已修复
+
 **0.9.54 (2026-10-12)**
 
 - 手机推送改为端到端加密:内容按每台手机单独加密,只有你的手机能解开,设备本身也不再内置推送凭据。⚠️ 请同时把手机 App 升级到 0.9.54——旧版 App 默认只收到「有新的通知,点击查看。升级 App 后,通知里就能直接看到内容」;确需旧 App 显示内容可在「设置 → 通知」打开「旧版 App 仍接收明文推送」
