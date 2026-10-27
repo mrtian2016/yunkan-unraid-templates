@@ -35,6 +35,13 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, TensorRT, TRT, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla T4, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.56 (2026-10-28)**
+
+- 小米 / 米家摄像头可以直接接入:添加摄像头时选「小米 / 米家」,用米家 App 扫码登录后勾选摄像头即可,实时画面、录像、AI 检测、云台和对讲都能用(连接相机时需要联网向小米验证;相机同一时间只允许一个连接,在米家 App 里看实时画面时这里可能短暂中断)
+- 事件中心可以用照片找人:上传照片、点选照片里的人脸,就能筛出这个人出现过的事件,显示出现次数并直接回放(需要管理员账号和 Pro 授权;照片只用于这次搜索,不会保存)
+- 直播延迟更低:网页看直播的延迟明显降低,不开声音时最低;部分摄像头(例如使用 G.711 音频的)开声音时,声音不再把画面拖慢;设备管理里的实时画面弹窗补上了静音按钮
+- 从宠物库等页面跳到事件中心时,较早的事件也能准确定位;标注页的待标注数量随保存同步减少,一批标完会自动接着下一批
+
 **0.9.55 (2026-10-18)**
 
 - 摄像头喊话、自动化语音播报恢复正常(10 月 13 日起语音合成服务调整了接入方式,喊话会全部失败;语音对讲不受影响)
