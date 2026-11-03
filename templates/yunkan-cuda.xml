@@ -35,6 +35,14 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.57 (2026-11-03)**
+
+- 事件中心可以按日期范围筛选(经典版和桌面版):可以只看某一天或某几天,也可以只填一头,能和摄像头筛选、搜索、用照片找人一起用
+- 115 网盘上传不再卡在同一段录像上:个别其实已经传到 115 的录像,因为没拿到网盘返回的文件信息被反复重试,升级后会自动恢复(重试期间录像一直保留在本地,没有丢失)
+- 小米摄像头:相机能同时提供低清画面时,AI 检测自动改用低清画面、更省 CPU(之前添加的会在升级后补测一次,部分型号补测时录像可能中断几秒,每台只测一次);部分型号开始播放几秒后切换分辨率导致 AI 检测画面花屏的问题已修复
+- 显卡推理启动失败时自动改用 CPU 继续检测,不再整路停掉
+- 喊话和语音播报更不容易失败:语音合成偶尔因网络问题失败时会自动重试几次
+
 **0.9.56 (2026-10-28)**
 
 - 小米 / 米家摄像头可以直接接入:添加摄像头时选「小米 / 米家」,用米家 App 扫码登录后勾选摄像头即可,实时画面、录像、AI 检测、云台和对讲都能用(连接相机时需要联网向小米验证;相机同一时间只允许一个连接,在米家 App 里看实时画面时这里可能短暂中断)
