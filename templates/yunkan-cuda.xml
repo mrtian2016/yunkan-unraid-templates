@@ -35,6 +35,13 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla P4, Tesla T4, Quadro, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.58 (2026-11-04)**
+
+- 部分摄像头录像不再隔一阵就断几分钟:使用 G.711 音频的摄像头(例如部分 TP-Link 型号)网络时断时续时,以前录像会出现好几分钟的空档,哪怕相机一直在线;现在相机一恢复就马上接着录
+- 部分大华和大华贴牌摄像头喊话没有声音已修复:按住说话、自动化语音播报和喊话试听显示已播放,相机却不出声,现在能正常出声
+- 授权过期后买了新授权码可以直接激活(以前经典版点「立即激活」会被带回首页);授权有效期内也能在「设置 → 授权」点「更换授权码」提前续费或换新码
+- 小米摄像头:低清画面的判断更准(之前判成不能提供低清画面的会在升级后重新检测一次,部分型号检测时录像可能中断几秒);个别型号主画面只有 720p 的问题已修复,升级后恢复相机支持的最高清晰度,不用重新添加
+
 **0.9.57 (2026-11-03)**
 
 - 事件中心可以按日期范围筛选(经典版和桌面版):可以只看某一天或某几天,也可以只填一头,能和摄像头筛选、搜索、用照片找人一起用
