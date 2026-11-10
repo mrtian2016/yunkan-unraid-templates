@@ -33,6 +33,11 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** NVR, VMS, CCTV, surveillance, security camera, video doorbell, RTSP, ONVIF, IP camera, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.59 (2026-11-10)**
+
+- TP-Link 摄像头对讲时也能听到现场:以前按住说话期间听不到相机那边的声音,要松开才能听到,现在讲话时也能同时听到现场
+- 部分大华摄像头按住说话没有声音已修复:上一版修好了喊话和语音播报,但在手机和网页上按住说话相机仍不出声,现在也能正常出声
+
 **0.9.58 (2026-11-04)**
 
 - 部分摄像头录像不再隔一阵就断几分钟:使用 G.711 音频的摄像头(例如部分 TP-Link 型号)网络时断时续时,以前录像会出现好几分钟的空档,哪怕相机一直在线;现在相机一恢复就马上接着录
