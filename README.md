@@ -1,6 +1,6 @@
-# YunKan — Unraid Community Applications templates
+# SkyView — Unraid Community Applications templates
 
-Single-container Unraid CA (Community Applications) templates for **YunKan** (云瞰). Once approved, Unraid users can install it from the **Apps** tab by searching "YunKan" — the experience is on par with a Home Assistant add-on.
+Single-container Unraid CA (Community Applications) templates for **SkyView** (云瞰). Once approved, Unraid users can install it from the **Apps** tab by searching "SkyView" — the experience is on par with a Home Assistant add-on.
 
 > Sibling repos:
 > - HA add-on: `yunkan_addons/` (project root)
@@ -12,12 +12,12 @@ Single-container Unraid CA (Community Applications) templates for **YunKan** (�
 
 | Template file | Container name | Inference EP | Target hardware |
 | --- | --- | --- | --- |
-| `templates/yunkan-cpu.xml` | `YunKan` | onnxruntime CPU | any amd64 host, no hardware dependency |
-| `templates/yunkan-openvino.xml` | `YunKan-OpenVINO` | OpenVINO + VAAPI | Intel iGPU (J4125 / N100 / N305 / 12-14th gen Core / Arc) |
-| `templates/yunkan-cuda.xml` | `YunKan-CUDA` | onnxruntime CUDA | NVIDIA GPU with ≥6 GB VRAM |
-| `templates/yunkan-trt.xml` | `YunKan-TRT` | TensorRT | NVIDIA GPU with ≥6 GB VRAM (highest throughput) |
+| `templates/yunkan-cpu.xml` | `SkyView` | onnxruntime CPU | any amd64 host, no hardware dependency |
+| `templates/yunkan-openvino.xml` | `SkyView-OpenVINO` | OpenVINO + VAAPI | Intel iGPU (J4125 / N100 / N305 / 12-14th gen Core / Arc) |
+| `templates/yunkan-cuda.xml` | `SkyView-CUDA` | onnxruntime CUDA | NVIDIA GPU with ≥6 GB VRAM |
+| `templates/yunkan-trt.xml` | `SkyView-TRT` | TensorRT | NVIDIA GPU with ≥6 GB VRAM (highest throughput) |
 
-The TRT variant builds GPU-specific inference engines at **first start, on the user's own GPU** (a few minutes, one time; cached under the data directory and reused across restarts / image updates). That keeps the per-GPU engine artifact out of the image, so the same CA template works across NVIDIA cards — the bundled CUDA / cuDNN / TensorRT all ride inside the container. The known failure mode is an older GPU / driver the bundled TensorRT can't target: the engine build errors out. The template's Overview steers those users back to **YunKan-CUDA** (same features, no engine build, no-wait first start), so CUDA stays the safe default and TRT is the opt-in throughput tier.
+The TRT variant builds GPU-specific inference engines at **first start, on the user's own GPU** (a few minutes, one time; cached under the data directory and reused across restarts / image updates). That keeps the per-GPU engine artifact out of the image, so the same CA template works across NVIDIA cards — the bundled CUDA / cuDNN / TensorRT all ride inside the container. The known failure mode is an older GPU / driver the bundled TensorRT can't target: the engine build errors out. The template's Overview steers those users back to **SkyView-CUDA** (same features, no engine build, no-wait first start), so CUDA stays the safe default and TRT is the opt-in throughput tier.
 
 ---
 
@@ -25,9 +25,9 @@ The TRT variant builds GPU-specific inference engines at **first start, on the u
 
 | Template file | Container name | Purpose | Target hardware |
 | --- | --- | --- | --- |
-| `templates/yunkan-trainer.xml` | `YunKan-Trainer` | fine-tune the object detector on your own footage (active-learning) | NVIDIA GPU + Unraid "NVIDIA Driver" plugin |
+| `templates/yunkan-trainer.xml` | `SkyView-Trainer` | fine-tune the object detector on your own footage (active-learning) | NVIDIA GPU + Unraid "NVIDIA Driver" plugin |
 
-Unlike the four variants above, **YunKan-Trainer is not a variant of the main app** — it is an optional, single-purpose GPU sidecar that runs *alongside* a main YunKan container (any variant), on its own port **28900**, so it does **not** collide with the "one variant at a time" rule. It has no web UI (`/health` just reports GPU / busy). Install it only to train a detector tuned to your own cameras: in the admin you confirm/correct the detector's pre-labels (active-learning), the main container ships the dataset to this sidecar over HTTP, it fine-tunes on your NVIDIA GPU and hands back an ONNX model — nothing leaves your LAN. Training is serial and each job runs in a short-lived subprocess that **fully releases GPU memory + RAM when it finishes**, so it coexists cleanly with other GPU workloads (Plex/Jellyfin transcode, the main YunKan CUDA/TRT variant) between jobs. Point the main container's *Settings → Training* page at `http://<host-ip>:28900` with a shared token. No NVIDIA GPU? You can train on on-demand cloud compute from the admin instead — this container is not needed for that.
+Unlike the four variants above, **SkyView-Trainer is not a variant of the main app** — it is an optional, single-purpose GPU sidecar that runs *alongside* a main SkyView container (any variant), on its own port **28900**, so it does **not** collide with the "one variant at a time" rule. It has no web UI (`/health` just reports GPU / busy). Install it only to train a detector tuned to your own cameras: in the admin you confirm/correct the detector's pre-labels (active-learning), the main container ships the dataset to this sidecar over HTTP, it fine-tunes on your NVIDIA GPU and hands back an ONNX model — nothing leaves your LAN. Training is serial and each job runs in a short-lived subprocess that **fully releases GPU memory + RAM when it finishes**, so it coexists cleanly with other GPU workloads (Plex/Jellyfin transcode, the main SkyView CUDA/TRT variant) between jobs. Point the main container's *Settings → Training* page at `http://<host-ip>:28900` with a shared token. No NVIDIA GPU? You can train on on-demand cloud compute from the admin instead — this container is not needed for that.
 
 ---
 
@@ -55,7 +55,7 @@ The XML fields are a 1:1 translation of `compose.unraid.yml`, so the license fin
 
 ### Once approved on CA (the steady state)
 
-1. Unraid Web UI → **Apps** tab → search "yunkan"
+1. Unraid Web UI → **Apps** tab → search "SkyView"
 2. Pick the variant that matches your hardware → click **Install**
 3. CA renders the install form from this repo's XML — the defaults are sane:
    - `Data directory` defaults to `/mnt/user/appdata/yunkan/data` (point this at a cache pool if you record a lot)
@@ -72,7 +72,7 @@ While the CA submission is in review, users can add this repo manually:
 
 1. Unraid Apps → top right **Settings** → **Template Repositories**
 2. Paste this repo's URL: `https://github.com/mrtian2016/yunkan-unraid-templates`
-3. Save → go back to **Apps** → search "yunkan" → flow continues as above
+3. Save → go back to **Apps** → search "SkyView" → flow continues as above
 
 ---
 
@@ -136,7 +136,7 @@ Once approved, CA auto-pulls from this repo. Edits to XMLs / icon / `ca_profile.
 - HA uses `config.yaml` (YAML); Unraid uses `.xml`. **Field semantics align but the format does not** — don't try to share templates between the two; write each separately.
 - HA add-on ports are rendered through the supervisor onto the host; Unraid uses host networking directly. The runtime port behavior is identical, but the Unraid XML's `<Display>always` on ports is purely cosmetic — editing those values does nothing.
 - HA add-on uses supervisor auth/ingress (optionally); Unraid has no ingress concept — you hit `http://[IP]:23406/` directly.
-- HA add-on `SKYVIEW_SELF_CONTAINER_NAME=addon_local_yunkan*` (supervisor's prefix); Unraid uses whatever the user named the container (this repo defaults to `YunKan` / `YunKan-OpenVINO` / `YunKan-CUDA` / `YunKan-TRT`).
+- HA add-on `SKYVIEW_SELF_CONTAINER_NAME=addon_local_yunkan*` (supervisor's prefix); Unraid uses whatever the user named the container (this repo defaults to `SkyView` / `SkyView-OpenVINO` / `SkyView-CUDA` / `SkyView-TRT`).
 
 ### Don'ts
 
@@ -148,7 +148,7 @@ Once approved, CA auto-pulls from this repo. Edits to XMLs / icon / `ca_profile.
 
 ## License
 
-YunKan is commercial software. The container image is free to use, but AI detection features require a license to activate — see https://yun-kan.com pricing. The Unraid XML templates in **this** repo are MIT.
+SkyView is commercial software. The container image is free to use, but AI detection features require a license to activate — see https://yun-kan.com pricing. The Unraid XML templates in **this** repo are MIT.
 
 ---
 

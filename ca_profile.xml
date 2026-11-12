@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <CommunityApplications>
   <Profile>
-**YunKan** — self-hosted, local-first **NVR / VMS** (Network Video Recorder) for home and small-business IP cameras, with on-device AI: motion, **person / vehicle / face / license plate (ALPR / LPR) / pose / fall detection**, plus **AI scene understanding** that turns raw detections into natural-language event summaries ("an elderly person fell in the living room" instead of "detected: pose=fall_down"). Your video — and your AI inference — stay on your LAN; nothing is uploaded to any vendor cloud, no OpenAI / Google / Anthropic API keys needed.
+**SkyView** (previously listed as YunKan) — self-hosted, local-first **NVR / VMS** (Network Video Recorder) for home and small-business IP cameras, with on-device AI: motion, **person / vehicle / face / license plate (ALPR / LPR) / pose / fall detection**, plus **AI scene understanding** that turns raw detections into natural-language event summaries ("an elderly person fell in the living room" instead of "detected: pose=fall_down"). Your video — and your AI inference — stay on your LAN; nothing is uploaded to any vendor cloud, no OpenAI / Google / Anthropic API keys needed.
 
 ![Dashboard](https://raw.githubusercontent.com/mrtian2016/yunkan-unraid-templates/main/screenshots/dashboard.jpg)
 
@@ -13,10 +13,10 @@ Works with any **RTSP** or **ONVIF** camera: **Reolink, Hikvision, Dahua, Amcres
 
 This repository ships four Community Applications templates for the same all-in-one image — pick the variant that matches your inference hardware:
 
-- **YunKan** — CPU-only inference. Runs on any amd64 box, no special hardware. Lowest setup friction; good for 1-4 cameras at low FPS.
-- **YunKan-OpenVINO** — Intel iGPU acceleration via **OpenVINO + VAAPI hardware decode** (UHD 6xx / Iris Xe / Arc / **N100 / N305 / N5105 / J4125 / J5040 / 12th-14th gen Core**). YOLO inference is typically 3-5x faster than CPU; software decode drops from ~80%/core to ~25%/core. Requires the **Intel GPU TOP** plugin.
-- **YunKan-CUDA** — **NVIDIA GPU** acceleration (≥6 GB VRAM recommended; works great on **RTX 3060 / 4060 / A2000 / Tesla P4 / T4 / Quadro**). Requires the **NVIDIA Driver** plugin.
-- **YunKan-TRT** — **NVIDIA GPU** acceleration via **TensorRT**, the highest-throughput variant. Builds GPU-specific inference engines on first start (a few minutes, one time; cached on disk and reused afterwards). Same hardware / plugin requirement as YunKan-CUDA; choose this for the most headroom on one GPU, or stay on YunKan-CUDA for a no-wait first start.
+- **SkyView** — CPU-only inference. Runs on any amd64 box, no special hardware. Lowest setup friction; good for 1-4 cameras at low FPS.
+- **SkyView-OpenVINO** — Intel iGPU acceleration via **OpenVINO + VAAPI hardware decode** (UHD 6xx / Iris Xe / Arc / **N100 / N305 / N5105 / J4125 / J5040 / 12th-14th gen Core**). YOLO inference is typically 3-5x faster than CPU; software decode drops from ~80%/core to ~25%/core. Requires the **Intel GPU TOP** plugin.
+- **SkyView-CUDA** — **NVIDIA GPU** acceleration (≥6 GB VRAM recommended; works great on **RTX 3060 / 4060 / A2000 / Tesla P4 / T4 / Quadro**). Requires the **NVIDIA Driver** plugin.
+- **SkyView-TRT** — **NVIDIA GPU** acceleration via **TensorRT**, the highest-throughput variant. Builds GPU-specific inference engines on first start (a few minutes, one time; cached on disk and reused afterwards). Same hardware / plugin requirement as SkyView-CUDA; choose this for the most headroom on one GPU, or stay on SkyView-CUDA for a no-wait first start.
 
 All four variants share the same ports (`23406`/tcp HTTP, `23880`/tcp RTSP, `24214`/tcp HLS + WebRTC signaling, `23515`/udp+tcp WebRTC ICE) so **only one variant can be installed at a time**.
 
