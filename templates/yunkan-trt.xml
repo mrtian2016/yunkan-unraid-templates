@@ -35,6 +35,16 @@ Watching from outside your network: enable it in the web interface (Settings, Ge
 &#xD;
 **Keywords:** SkyView, YunKan, NVR, VMS, CCTV, surveillance, security camera, RTSP, ONVIF, IP camera, TensorRT, TRT, CUDA, NVIDIA, GPU, NVDEC, RTX 3060, RTX 4060, RTX 4070, A2000, Tesla T4, motion detection, person detection, vehicle detection, face recognition, license plate recognition, ALPR, LPR, fall detection, pose detection, two-way audio, talkback, 24/7 recording, continuous recording, timeline playback, WebRTC, HLS, Home Assistant, MQTT, smart home, AI NVR, AI camera, AI scene understanding, natural language event summary, smart event description, on-device AI, edge AI, offline AI, no API key, no cloud, privacy, self-hosted, Frigate alternative, Shinobi alternative, ZoneMinder alternative, Scrypted alternative, Agent DVR alternative, iSpy alternative, MotionEye alternative, BlueIris alternative, Reolink, Hikvision, Dahua, Amcrest, Annke, Uniview, EZVIZ, Foscam, Lorex, Tapo, Wyze, Xiaomi, Eufy, Imou, Aqara, HomeKit, Apple Home, HomeKit Secure Video, HKSV, Siri, GB28181, GB/T 28181, birdseye, virtual tripwire, line crossing, entry exit detection, video wall, PTZ, pan tilt zoom, package detection, parcel detection, baby cry detection, people library, NVR playback, multi-channel playback, go2rtc, 云瞰, 摄像头, 监控, 显卡推理, AI 监控, 本地 AI, 自然语言.</Overview>
   <Changes>
+**0.9.60 (2026-11-18)**
+
+- 115 云盘快满时会自动删除最旧的录像:以前 115 只进不出,满了以后新录像传不上去;现在剩余空间不够时从最旧的录像开始删,和本机硬盘的循环覆盖一样。115 主要被你自己的其它文件占满时不删、只提醒,设为「保留」的事件录像不删
+- 录像存储按「本机」和「115 云盘」分开管理:存储页拆成几张卡片,115 上的录像也可以设「录像最多占用」
+- 关掉「上传到 115 后删除本机这份」时,本机保留的那份计入本机空间上限、满了先删最旧的,不会再把硬盘写满
+- 机械硬盘上重启或重建容器后,AI 检测不再要等好几分钟:启动时不再把所有录像和快照逐个检查一遍
+- 残留录像清理改为在存储页「存储维护」里手动进行,查不到记录的录像比例异常高时清理前会特别提醒;删除摄像头后它留下的录像和快照会自动清理
+- AI 检测更省 CPU:多路摄像头同时检测时 CPU 占用明显降低,一直在晃却从来没检出东西的地方(树、电视)不再每帧检测
+- 摄像头离线时不再反复推送「检测已停止」,摄像头恢复后检测马上跟着恢复
+
 **0.9.59 (2026-11-10)**
 
 - TP-Link 摄像头对讲时也能听到现场:以前按住说话期间听不到相机那边的声音,要松开才能听到,现在讲话时也能同时听到现场
